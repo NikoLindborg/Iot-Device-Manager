@@ -1,6 +1,6 @@
 # Iot-Device-Manager
 
-Team project for Metropolia UAD.
+Team project for Metropolia UAD in collaboration with Nokia Bell Labs.
 
 Authors Jaani Kaukonen, Aleksi Kosonen, Niko Lindborg and Aleksi Kytö. 
 

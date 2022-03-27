@@ -4,10 +4,12 @@ Team project for Metropolia UAD in collaboration with Nokia Bell Labs.
 
 Authors Jaani Kaukonen, Aleksi Kosonen, Niko Lindborg and Aleksi Kytö. 
 
+# About Iot-Device-Manager
+
 
 # Installation 
 
-1. Clone repo
+1. Clone repository
 ```
 https://github.com/NikoLindborg/Iot-Device-Manager
 ```

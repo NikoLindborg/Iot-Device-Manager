@@ -11,7 +11,7 @@ Authors Jaani Kaukonen, Aleksi Kosonen, Niko Lindborg and Aleksi Kytö.
 
 1. Clone repository
 ```
-https://github.com/NikoLindborg/Iot-Device-Manager
+git clone https://github.com/NikoLindborg/Iot-Device-Manager
 ```
 2. Install NPM packages
 ```

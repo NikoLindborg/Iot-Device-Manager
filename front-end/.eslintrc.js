@@ -25,9 +25,19 @@ module.exports = {
     'no-console': 0,
     'require-jsdoc': 0,
     'prettier/prettier': 'error',
-    'comma-dangle': ['error', 'never'],
+    'comma-dangle': [
+      'error',
+      {
+        arrays: 'only-multiline',
+        objects: 'only-multiline',
+        imports: 'only-multiline',
+        exports: 'only-multiline',
+        functions: 'only-multiline',
+      },
+    ],
     semi: [2, 'never'],
     indent: ['error', 2],
+    'operator-linebreak': ['error', 'before'],
   },
   settings: {
     react: {

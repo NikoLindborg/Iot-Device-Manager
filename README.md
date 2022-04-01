@@ -1,6 +1,26 @@
-# Getting Started with Create React App
+# Iot-Device-Manager
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+Team project for Metropolia UAD in collaboration with Nokia Bell Labs.
+
+Authors Jaani Kaukonen, Aleksi Kosonen, Niko Lindborg and Aleksi Kytö. 
+
+# About Iot-Device-Manager
+
+
+# Installation 
+
+1. Clone repository
+```
+git clone https://github.com/NikoLindborg/Iot-Device-Manager
+```
+2. Install NPM packages
+```
+npm i
+```
+3. Run the app
+```
+npm start
+```
 
 ## Available Scripts
 

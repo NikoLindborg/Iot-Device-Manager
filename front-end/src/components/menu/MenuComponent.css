@@ -1,0 +1,24 @@
+.curve {
+    position: absolute;
+    top: 5%;
+    left: 20%;
+    height: 1rem;
+    width: 1rem;
+    background-color: #29334A;
+    background: radial-gradient(circle at bottom right, transparent 1rem, #29334A 1rem)
+}
+
+.menu-container {
+    position: absolute;
+    top: 5%;
+    left: 0;
+    width: 20%;
+    min-height: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    background-color: #29334A;
+    background-image: url('../../assets/server.png'), linear-gradient(to bottom, #29334A, #39445f); ;
+    background-size: cover;
+    background-position: center;
+}

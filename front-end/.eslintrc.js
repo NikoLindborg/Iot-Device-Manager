@@ -25,6 +25,13 @@ module.exports = {
     'no-console': 0,
     'require-jsdoc': 0,
     'prettier/prettier': 'error',
+    'max-len': [
+      2,
+      {
+        code: 140,
+        ignorePattern: `^import .*`,
+      },
+    ],
     'comma-dangle': [
       'error',
       {

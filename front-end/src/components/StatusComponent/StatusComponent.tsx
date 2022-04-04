@@ -5,14 +5,16 @@ import './StatusComponent.css'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
-//  Hardcoded data for now, until we receive data from the backend
+//  Hardcoded data for device amounts for now, until we receive data from the backend
 
 const offlineDeviceAmount = 2
 const untrustedDeviceAmount = 1
 const trustedDeviceAmount = 7
-const totalDeviceAmount = offlineDeviceAmount + untrustedDeviceAmount + trustedDeviceAmount
+const totalDeviceAmount =
+  offlineDeviceAmount + untrustedDeviceAmount + trustedDeviceAmount
 
-const data = {
+//  Data includind the datasets-property that the Doughtnut requires
+const statusComponentData = {
   datasets: [
     {
       data: [offlineDeviceAmount, untrustedDeviceAmount, trustedDeviceAmount],
@@ -23,10 +25,10 @@ const data = {
   ],
 }
 
-export const StatusComponent = () => {
+export const StatusComponent: React.FC = () => {
   return (
     <div className="status-container">
-      <Doughnut data={data} />
+      <Doughnut data={statusComponentData} />
       <div className="status-description-container">
         <div className="status-description">
           <p>
@@ -38,5 +40,3 @@ export const StatusComponent = () => {
     </div>
   )
 }
-
-export default {trustedDeviceAmount}

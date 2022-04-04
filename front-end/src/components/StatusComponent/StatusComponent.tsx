@@ -25,7 +25,7 @@ const statusComponentData = {
   ],
 }
 
-export const StatusComponent: React.FC = () => {
+const StatusComponent: React.FC = () => {
   return (
     <div className="status-container">
       <Doughnut data={statusComponentData} />
@@ -40,3 +40,5 @@ export const StatusComponent: React.FC = () => {
     </div>
   )
 }
+
+export default StatusComponent

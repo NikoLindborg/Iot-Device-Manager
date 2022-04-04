@@ -1,7 +1,6 @@
 import React, {useEffect, useState} from 'react'
 import './App.css'
-import {MqttClient} from 'mqtt'
-import {StatusComponent} from './components/StatusComponent/StatusComponent'
+import StatusComponent from './components/StatusComponent/StatusComponent'
 
 function App() {
   return (

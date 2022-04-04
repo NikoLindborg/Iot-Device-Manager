@@ -41,6 +41,12 @@ const BaseView: React.FC = () => {
       </div>
       <div className="base-view-content-container">
         {/* Content comes here */}
+        <h1>Device</h1>
+        <h1>Device</h1>
+        <h1>Device</h1>
+        <h1>Device</h1>
+        <h1>Device</h1>
+        <h1>Device</h1>
       </div>
     </div>
   )

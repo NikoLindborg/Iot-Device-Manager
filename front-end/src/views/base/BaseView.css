@@ -12,11 +12,12 @@
     top: 4rem;
     border-radius: 0.5rem;
     padding: 1rem;
+    overflow-y: scroll
 }
 
 @media only screen and (min-width: 1000px) {
     .base-view-content-container {
         left: 14rem;
-        background-color: #2F3E47;
+        background: linear-gradient(0deg, rgba(30,35,46,1) 0%, rgba(47,62,71,1) 100%);
     }
 }

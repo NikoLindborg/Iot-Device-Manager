@@ -3,7 +3,11 @@ import NokiaBellLabsLogo from '../../../assets/NokiaBellLabsLogo'
 import './MobileNavigationComponent.css'
 import {Icon} from '@iconify/react'
 
-const MobileNavigationComponent: React.FC = ({toggleMenu}) => {
+type ChildProps = {
+  toggleMenu?: () => void
+}
+
+const MobileNavigationComponent: React.FC<ChildProps> = ({toggleMenu}) => {
   return (
     <div className="nav-bar">
       <NokiaBellLabsLogo />

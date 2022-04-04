@@ -4,9 +4,11 @@ import BaseView from './views/base/BaseView'
 
 const App: React.FC = () => {
   return (
-    <div>
-      <BaseView />
-    </div>
+    <>
+      <div>
+        <BaseView />
+      </div>
+    </>
   )
 }
 

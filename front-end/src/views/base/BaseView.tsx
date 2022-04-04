@@ -10,6 +10,8 @@ const BaseView: React.FC = () => {
     return window.innerWidth > 1000 ? false : true
   })
 
+  const [open, setOpen] = useState(false)
+
   const handleResize = () => {
     window.innerWidth > 1000 ? setIsMobile(false) : setIsMobile(true)
   }
@@ -18,19 +20,28 @@ const BaseView: React.FC = () => {
     window.addEventListener('resize', handleResize)
   })
 
+  const toggleMenu = () => {
+    setOpen(!open)
+  }
+
   return (
-    <div>
-      {isMobile ? (
-        <>
-          <MobileNavigationComponent />
-          <MobileMenuComponent />
-        </>
-      ) : (
-        <>
-          <NavigationComponent />
-          <MenuComponent />
-        </>
-      )}
+    <div className="base-view-container">
+      <div>
+        {isMobile ? (
+          <>
+            <MobileNavigationComponent toggleMenu={toggleMenu} />
+            {open && <MobileMenuComponent />}
+          </>
+        ) : (
+          <>
+            <NavigationComponent />
+            <MenuComponent />
+          </>
+        )}
+      </div>
+      <div className="base-view-content-container">
+        {/* Content comes here */}
+      </div>
     </div>
   )
 }

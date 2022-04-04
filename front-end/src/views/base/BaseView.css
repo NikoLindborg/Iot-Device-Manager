@@ -1,5 +1,22 @@
-* {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+.base-view-container {
+    width: 100vw;
+    height: 100vh;
+    background-color: #1E232E;
+}
+
+.base-view-content-container {
+    position: absolute;
+    bottom: 1rem;
+    right: 1rem;
+    left: 1rem;
+    top: 4rem;
+    border-radius: 0.5rem;
+    padding: 1rem;
+}
+
+@media only screen and (min-width: 1000px) {
+    .base-view-content-container {
+        left: 14rem;
+        background-color: #2F3E47;
+    }
 }

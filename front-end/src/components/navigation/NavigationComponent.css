@@ -1,13 +1,13 @@
 .nav-bar {
-    position: absolute;
+    position: relative;
     top: 0;
     right: 0;
     width: 100%;
-    height: 5%;
+    height: 5vh;
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1em;
+    padding: 0.8rem;
     background-color: #29334A;
 }
 

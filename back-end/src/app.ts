@@ -1,14 +1,31 @@
 import {ifAnnouncements} from './types/announcementType'
 import express from 'express'
 const app = express()
-const port = 3000
+const port = 3001
 import mqtt from 'mqtt'
 import {connectUrl, clientId, originalTopic} from './utils/GlobalVariables'
+import WebSocket from 'ws'
+const wss = new WebSocket.Server({port: 8080})
 const topics = [originalTopic]
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
 })
+
+wss.on('connection', (ws) => {
+  console.log('new client connected')
+  ws.on('message', (data) => {
+    console.log(`Client has sent us: ${data}`)
+  })
+  ws.on('close', () => {
+    console.log('the client has connected')
+  })
+  ws.onerror = function () {
+    console.log('Some Error occurred')
+  }
+})
+
+console.log('The WebSocket server is running on port 8080')
 
 const client = mqtt.connect(connectUrl, {
   clientId,
@@ -43,6 +60,11 @@ client.on('message', (topic, payload) => {
       `Received message from topic: ${topic} reading out: ${channels[0]} ${channels[1]}`
     )
   } else {
+    wss.clients.forEach((client) => {
+      if (client.readyState === WebSocket.OPEN) {
+        client.send(payload.toString());
+      }
+    });
     console.log(
       `Received message from topic: ${topic} reading out: ${payload.toString()}`
     )

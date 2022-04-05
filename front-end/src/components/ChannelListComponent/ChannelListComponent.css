@@ -1,4 +1,4 @@
-.channel-list-container {
+.channel-list-component-container {
   background: rgb(255,255,255);
   background: linear-gradient(180deg,#2F3E47 0%, #1E232E 100%);
   height: 5rem;
@@ -12,13 +12,13 @@
   box-shadow:  0 0.25rem 0.625rem -0.125rem #000000;
 }
 
-.channel-list-img {
+.channel-list-component-img {
   max-width: 3.125rem;
   object-fit: contain;
   margin-right: 0.625rem;
 }
 
-.channel-list-left {
+.channel-list-component-left {
   width: 65%;
   display: flex;
   flex-direction: row;
@@ -27,7 +27,7 @@
   align-items: center;
 }
 
-.channel-list-right {
+.channel-list-component-right {
   width: 35%;
   display: flex;
   flex-direction: row;
@@ -37,6 +37,6 @@
   font-weight: bold;
 }
 
-.channel-list-label {
+.channel-list-component-label {
   margin: 0;
 }

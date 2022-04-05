@@ -10,12 +10,15 @@ interface ChannelListProps {
 
 const ChannelListComponent: React.FC<ChannelListProps> = ({componentItems}) => {
   return (
-    <div className="channel-list-container">
-      <div className="channel-list-left">
-        <img className="channel-list-img" src={componentItems.icon}></img>
-        <h2 className="channel-list-label">{componentItems.label}</h2>
+    <div className="channel-list-component-container">
+      <div className="channel-list-component-left">
+        <img
+          className="channel-list-component-img"
+          src={componentItems.icon}
+        ></img>
+        <h2 className="channel-list-component-label">{componentItems.label}</h2>
       </div>
-      <div className="channel-list-right">
+      <div className="channel-list-component-right">
         <p> {'>'} </p>
       </div>
     </div>

@@ -1,11 +1,10 @@
-import React, { useEffect, useState } from 'react'
+import React from 'react'
 import './App.css'
-import { MqttClient } from 'mqtt'
 import StatusComponent from './components/StatusComponent/StatusComponent'
 import ChannelListComponent from './components/ChannelListComponent/ChannelListComponent'
 import DeviceListComponent from './components/DeviceListComponent/DeviceListComponent'
-
-const iconPath = process.env.PUBLIC_URL + '/icons/'
+import ChannelIcon from './assets/icons/channel_icon.svg'
+import StatusRedIcon from './assets/icons/status_red.svg'
 
 function App() {
   return (
@@ -13,13 +12,13 @@ function App() {
       <StatusComponent></StatusComponent>
       <ChannelListComponent
         componentItems={{
-          icon: `${iconPath}channel_icon.svg`,
+          icon: ChannelIcon,
           label: 'Temperature',
         }}
       ></ChannelListComponent>
       <DeviceListComponent
         componentItems={{
-          icon: `${iconPath}status_red.svg`,
+          icon: StatusRedIcon,
           label: 'Raspberry Pi',
           info: 'Device is offline',
         }}

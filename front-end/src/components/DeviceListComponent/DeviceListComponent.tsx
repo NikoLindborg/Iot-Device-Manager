@@ -11,15 +11,20 @@ interface DeviceListProps {
 
 const DeviceListComponent: React.FC<DeviceListProps> = ({componentItems}) => {
   return (
-    <div className="device-list-container">
-      <div className="device-list-left">
-        <img className="device-list-img" src={componentItems.icon}></img>
-        <div className="device-list-textcontainer">
-          <h2 className="device-list-label">{componentItems.label}</h2>
-          <p className="device-list-info">{componentItems.info}</p>
+    <div className="device-list-component-container">
+      <div className="device-list-component-left">
+        <img
+          className="device-list-component-img"
+          src={componentItems.icon}
+        ></img>
+        <div className="device-list-component-textcontainer">
+          <h2 className="device-list-component-label">
+            {componentItems.label}
+          </h2>
+          <p className="device-list-component-info">{componentItems.info}</p>
         </div>
       </div>
-      <div className="device-list-right">
+      <div className="device-list-component-right">
         <p> {'>'} </p>
       </div>
     </div>

@@ -1,0 +1,23 @@
+.status-container {
+  width: 11.25rem;
+  height: 11.25rem;
+  position: relative;
+  background-color: #1E232E;
+}
+
+.status-description-container {
+  height: 11.25rem;
+  width: 11.25rem;
+  position: absolute;
+  top: 0;
+  left: 0;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.status-description p {
+  font-weight: bold;
+  color: white;
+  margin: 0;
+}

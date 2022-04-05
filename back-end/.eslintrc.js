@@ -11,10 +11,18 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint', 'prettier'],
+  ignorePattern: ['./dist'],
   rules: {
     'no-console': 0,
     'require-jsdoc': 0,
     'prettier/prettier': 'error',
+    'max-len': [
+      2,
+      {
+        code: 140,
+        ignorePattern: `^import .*`,
+      },
+    ],
     'comma-dangle': [
       'error',
       {

@@ -18,7 +18,7 @@ const BaseView: React.FC = () => {
 
   useEffect(() => {
     window.addEventListener('resize', handleResize)
-  })
+  }, [])
 
   const toggleMenu = () => {
     setOpen(!open)

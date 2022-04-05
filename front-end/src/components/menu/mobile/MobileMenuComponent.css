@@ -9,6 +9,7 @@
     background-image: url('../../../assets/server.png'), linear-gradient(to bottom, #29334A, #39445f); ;
     background-size: cover;
     background-position: center;
+    z-index: 1001;
 }
 
 .mobile-icons {

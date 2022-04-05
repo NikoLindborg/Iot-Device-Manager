@@ -6,28 +6,18 @@ import DeviceListComponent from './components/DeviceListComponent/DeviceListComp
 import ChannelIcon from './assets/icons/channel_icon.svg'
 import StatusRedIcon from './assets/icons/status_red.svg'
 import useWebSocket from './hooks/ApiHooks'
+import BaseView from './views/base/BaseView'
 
-function App() {
+const App: React.FC = () => {
   const {data} = useWebSocket()
+
   useEffect(() => {
     console.log('hei', data)
   }, [data])
+
   return (
     <div className="App">
-      <StatusComponent></StatusComponent>
-      <ChannelListComponent
-        componentItems={{
-          icon: ChannelIcon,
-          label: 'Temperature',
-        }}
-      ></ChannelListComponent>
-      <DeviceListComponent
-        componentItems={{
-          icon: StatusRedIcon,
-          label: 'Raspberry Pi',
-          info: 'Device is offline',
-        }}
-      ></DeviceListComponent>
+      <BaseView />
     </div>
   )
 }

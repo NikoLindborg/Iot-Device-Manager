@@ -1,16 +1,30 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
+require("dotenv/config");
 const app = (0, express_1.default)();
 const port = 3001;
 const mqtt_1 = __importDefault(require("mqtt"));
 const GlobalVariables_1 = require("./utils/GlobalVariables");
 const ws_1 = __importDefault(require("ws"));
+const mongoose_1 = __importDefault(require("mongoose"));
+const Device_1 = require("./schemas/Device");
+const SubscribedChannel_1 = require("./schemas/SubscribedChannel");
 const wss = new ws_1.default.Server({ port: 8080 });
 const topics = [GlobalVariables_1.originalTopic];
+const url = process.env.MONGODB_URL;
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
@@ -68,4 +82,45 @@ client.on('message', (topic, payload) => {
 app.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);
 });
+mongoose_1.default.connect(url);
+const db = mongoose_1.default.connection;
+db.on("error", error => console.log(error));
+db.once("open", () => console.log("connection to db established"));
+//testDb()
+function testDb() {
+    return __awaiter(this, void 0, void 0, function* () {
+        const testDevice = yield Device_1.Device.create({
+            name: 'First Device',
+            trustedState: 1,
+            channels: ['Test Channel'],
+            history: [
+                {
+                    name: 'First Device',
+                    timestamp: 1649248380,
+                    trustedState: 1,
+                },
+            ],
+            sensors: [
+                {
+                    name: 'Temperature',
+                    sensorData: [
+                        {
+                            sensorValue: 25,
+                            timestamp: 1649248380,
+                        },
+                    ],
+                },
+            ],
+        });
+        const testChannels = yield SubscribedChannel_1.SubscribedChannel.create({
+            name: 'Test channel',
+            devices: testDevice,
+        });
+    });
+}
+// Device.find({}).then(result => {
+//   result.forEach(device => {
+//     console.log(device as IDevice)
+//   })
+// })
 //# sourceMappingURL=app.js.map

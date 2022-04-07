@@ -1,12 +1,19 @@
 import {ifAnnouncements} from './types/announcementType'
 import express from 'express'
+import 'dotenv/config'
 const app = express()
 const port = 3001
 import mqtt from 'mqtt'
 import {connectUrl, clientId, originalTopic} from './utils/GlobalVariables'
 import WebSocket from 'ws'
+import mongoose from 'mongoose'
+import {Device} from './schemas/Device'
+import {SubscribedChannel} from './schemas/SubscribedChannel'
+import { IDevice } from './types/deviceType'
+
 const wss = new WebSocket.Server({port: 8080})
 const topics = [originalTopic]
+const url = process.env.MONGODB_URL
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -73,4 +80,47 @@ client.on('message', (topic, payload) => {
 
 app.listen(port, () => {
   return console.log(`Express is listening at http://localhost:${port}`)
+})
+
+mongoose.connect(url)
+const db = mongoose.connection;
+db.on("error", error => console.log(error));
+db.once("open", () => console.log("connection to db established"));
+
+//testDb()
+
+async function testDb() {
+  const testDevice = await Device.create({
+      name: 'First Device',
+      trustedState: 1,
+      channels: ['Test Channel'],
+      history: [
+          {
+              timestamp: 1649248380,
+              trustedState: 1,
+          },
+      ],
+      sensors: [
+          {
+              name: 'Temperature',
+              sensorData: [
+                  {
+                      sensorValue: 25,
+                      timestamp: 1649248380,
+                  },
+              ],
+          },
+      ],
+  })
+
+  const testChannels = await SubscribedChannel.create({
+    name: 'Test channel',
+    devices: testDevice,
+  })
+}
+
+Device.find({}).then(result => {
+  result.forEach(device => {
+    console.log(device as IDevice)
+  })
 })

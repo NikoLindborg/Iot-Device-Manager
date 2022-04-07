@@ -1,22 +1,11 @@
+import { IDeviceHistory } from "./deviceHistoryType";
+import { IDeviceSensor } from "./deviceSensorType";
+
 export interface IDevice {
     name: string,
-    trustedState: number,
-    channels: string[],
-    history: [
-        {
-            timestamp: number,
-            trustedState: number,
-        },
-    ],
-    sensors: [
-        {
-            name: string,
-            sensorData: [
-                {
-                    sensorValue: any,
-                    timestamp: number,
-                },
-            ],
-        },
-    ],
+    trustedState?: number,
+    channels?: string[],
+    history?: IDeviceHistory[],
+    sensors?: IDeviceSensor[],
+    _id?: Object
 }

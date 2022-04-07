@@ -7,6 +7,7 @@ const deviceSchema = new Schema<IDevice>({
     channels: [String],
     history: [
         {
+            name: String,
             timestamp: Number,
             trustedState: Number,
         },

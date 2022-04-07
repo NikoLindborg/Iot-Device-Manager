@@ -8,6 +8,7 @@ const deviceSchema = new mongoose_1.Schema({
     channels: [String],
     history: [
         {
+            name: String,
             timestamp: Number,
             trustedState: Number,
         },

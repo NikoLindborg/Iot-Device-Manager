@@ -96,6 +96,7 @@ async function testDb() {
       channels: ['Test Channel'],
       history: [
           {
+              name: 'First Device',
               timestamp: 1649248380,
               trustedState: 1,
           },
@@ -119,8 +120,8 @@ async function testDb() {
   })
 }
 
-Device.find({}).then(result => {
-  result.forEach(device => {
-    console.log(device as IDevice)
-  })
-})
+// Device.find({}).then(result => {
+//   result.forEach(device => {
+//     console.log(device as IDevice)
+//   })
+// })

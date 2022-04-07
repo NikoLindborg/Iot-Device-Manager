@@ -95,6 +95,7 @@ function testDb() {
             channels: ['Test Channel'],
             history: [
                 {
+                    name: 'First Device',
                     timestamp: 1649248380,
                     trustedState: 1,
                 },
@@ -117,9 +118,9 @@ function testDb() {
         });
     });
 }
-Device_1.Device.find({}).then(result => {
-    result.forEach(device => {
-        console.log(device);
-    });
-});
+// Device.find({}).then(result => {
+//   result.forEach(device => {
+//     console.log(device as IDevice)
+//   })
+// })
 //# sourceMappingURL=app.js.map

@@ -1,11 +1,11 @@
 import React, {useEffect} from 'react'
 import './App.css'
-import {useWebSocket, getDevices} from './hooks/ApiHooks'
+import {useWebSocket, useDevices} from './hooks/ApiHooks'
 import BaseView from './views/base/BaseView'
 
 const App: React.FC = () => {
   const {data} = useWebSocket()
-  const devices = getDevices()
+  const {devices} = useDevices()
 
   useEffect(() => {
     console.log('hei', data)

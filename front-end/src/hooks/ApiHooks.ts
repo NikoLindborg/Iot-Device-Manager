@@ -29,17 +29,18 @@ export const useWebSocket = () => {
   return {data}
 }
 
-export const getDevices = async () => {
+export const useDevices = () => {
   const [devices, setDevices] = useState([])
 
   useEffect(() => {
-    const fectDevices = async () => {
-      const response = await fetch(apiUrl)
-      const data = await response.json()
-      setDevices(data)
-    }
-
-    fectDevices()
+    fetchDevices()
   }, [])
-  return devices
+
+  const fetchDevices = async () => {
+    const response = await fetch(apiUrl)
+    const data = await response.json()
+    setDevices(data)
+  }
+
+  return {devices}
 }

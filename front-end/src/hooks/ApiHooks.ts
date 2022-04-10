@@ -1,7 +1,7 @@
 import {useState, useEffect} from 'react'
-import {wsLocalHostUrl} from '../globals/globals'
+import {wsLocalHostUrl, apiUrl} from '../globals/globals'
 
-const useWebSocket = () => {
+export const useWebSocket = () => {
   const [data, setData] = useState([''])
   const [connection, setConnection] = useState<WebSocket>()
   const handleData = (newData: string) => {
@@ -29,4 +29,17 @@ const useWebSocket = () => {
   return {data}
 }
 
-export default useWebSocket
+export const getDevices = async () => {
+  const [devices, setDevices] = useState([])
+
+  useEffect(() => {
+    const fectDevices = async () => {
+      const response = await fetch(apiUrl)
+      const data = await response.json()
+      setDevices(data)
+    }
+
+    fectDevices()
+  }, [])
+  return devices
+}

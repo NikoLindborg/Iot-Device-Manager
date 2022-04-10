@@ -19,12 +19,16 @@ const port = 3001;
 const mqtt_1 = __importDefault(require("mqtt"));
 const GlobalVariables_1 = require("./utils/GlobalVariables");
 const ws_1 = __importDefault(require("ws"));
-const mongoose_1 = __importDefault(require("mongoose"));
 const Device_1 = require("./schemas/Device");
 const SubscribedChannel_1 = require("./schemas/SubscribedChannel");
+const db_1 = __importDefault(require("./config/db"));
+const deviceRoutes_1 = require("./routes/deviceRoutes");
+const channelRoutes_1 = require("./routes/channelRoutes");
 const wss = new ws_1.default.Server({ port: 8080 });
 const topics = [GlobalVariables_1.originalTopic];
-const url = process.env.MONGODB_URL;
+(0, db_1.default)();
+app.use('/api/devices', deviceRoutes_1.router);
+app.use('/api/channels', channelRoutes_1.router);
 app.get('/', (req, res) => {
     res.send('Hello World!');
 });
@@ -82,10 +86,6 @@ client.on('message', (topic, payload) => {
 app.listen(port, () => {
     return console.log(`Express is listening at http://localhost:${port}`);
 });
-mongoose_1.default.connect(url);
-const db = mongoose_1.default.connection;
-db.on("error", error => console.log(error));
-db.once("open", () => console.log("connection to db established"));
 //testDb()
 function testDb() {
     return __awaiter(this, void 0, void 0, function* () {

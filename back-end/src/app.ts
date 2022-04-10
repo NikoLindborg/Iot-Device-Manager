@@ -10,10 +10,18 @@ import mongoose from 'mongoose'
 import {Device} from './schemas/Device'
 import {SubscribedChannel} from './schemas/SubscribedChannel'
 import { IDevice } from './types/deviceType'
+import connectDB from './config/db'
+import {router as deviceRoutes} from './routes/deviceRoutes'
+import {router as channelRoutes} from './routes/channelRoutes'
+import { getDevices } from './controllers/deviceController'
 
 const wss = new WebSocket.Server({port: 8080})
 const topics = [originalTopic]
-const url = process.env.MONGODB_URL
+
+connectDB()
+
+app.use('/api/devices', deviceRoutes)
+app.use('/api/channels', channelRoutes)
 
 app.get('/', (req, res) => {
   res.send('Hello World!')
@@ -81,11 +89,6 @@ client.on('message', (topic, payload) => {
 app.listen(port, () => {
   return console.log(`Express is listening at http://localhost:${port}`)
 })
-
-mongoose.connect(url)
-const db = mongoose.connection;
-db.on("error", error => console.log(error));
-db.once("open", () => console.log("connection to db established"));
 
 //testDb()
 

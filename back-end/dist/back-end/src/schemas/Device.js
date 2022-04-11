@@ -16,13 +16,9 @@ const deviceSchema = new mongoose_1.Schema({
     ],
     sensors: [
         {
-            name: String,
-            sensorData: [
-                {
-                    sensorValue: {},
-                    timestamp: String,
-                },
-            ],
+            sensorType: String,
+            sensorValue: String,
+            timestamp: String,
         },
     ],
 });

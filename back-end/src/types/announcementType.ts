@@ -1,4 +1,6 @@
 export interface ifAnnouncements {
-  name: string
-  channels: string
+  deviceName: string
+  _id: string
+  channels: string[]
+  timestamp: string
 }

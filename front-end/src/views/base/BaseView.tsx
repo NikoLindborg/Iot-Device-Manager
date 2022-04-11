@@ -9,12 +9,13 @@ import StatusComponent from '../../components/StatusComponent/StatusComponent'
 import ChannelIcon from '../../assets/icons/channel_icon.svg'
 import StatusRedIcon from '../../assets/icons/status_red.svg'
 import './BaseView.css'
+import {useDevices} from '../../hooks/ApiHooks'
 
 const BaseView: React.FC = () => {
   const [isMobile, setIsMobile] = useState(() => {
     return window.innerWidth > 1000 ? false : true
   })
-
+  const {devices} = useDevices()
   const [open, setOpen] = useState(false)
 
   const handleResize = () => {
@@ -27,6 +28,10 @@ const BaseView: React.FC = () => {
 
   const toggleMenu = () => {
     setOpen(!open)
+  }
+
+  const handleClick = (id: string) => {
+    console.log(id)
   }
 
   return (
@@ -46,20 +51,25 @@ const BaseView: React.FC = () => {
       </div>
       <div className="base-view-content-container">
         {/* Content comes here */}
-        <StatusComponent></StatusComponent>
+        <StatusComponent />
         <ChannelListComponent
           componentItems={{
             icon: ChannelIcon,
             label: 'Temperature',
           }}
-        ></ChannelListComponent>
-        <DeviceListComponent
-          componentItems={{
-            icon: StatusRedIcon,
-            label: 'Raspberry Pi',
-            info: 'Device is offline',
-          }}
-        ></DeviceListComponent>
+        />
+        {devices.map((device) => (
+          <DeviceListComponent
+            id={device._id}
+            key={device._id}
+            componentItems={{
+              icon: StatusRedIcon,
+              label: device.name,
+              info: 'Device is Offline',
+            }}
+            clickHandler={handleClick}
+          />
+        ))}
       </div>
     </div>
   )

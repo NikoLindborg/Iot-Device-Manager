@@ -7,5 +7,5 @@ export interface IDevice {
   channels?: string[]
   history?: IDeviceHistory[]
   sensors?: IDeviceSensor[]
-  _id?: Object
+  _id: string
 }

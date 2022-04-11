@@ -1,3 +1,4 @@
+import {IDevice} from '../types/deviceType'
 import {useState, useEffect} from 'react'
 import {wsLocalHostUrl, apiUrl} from '../globals/globals'
 
@@ -30,7 +31,7 @@ export const useWebSocket = () => {
 }
 
 export const useDevices = () => {
-  const [devices, setDevices] = useState([])
+  const [devices, setDevices] = useState<IDevice[]>([])
 
   useEffect(() => {
     fetchDevices()

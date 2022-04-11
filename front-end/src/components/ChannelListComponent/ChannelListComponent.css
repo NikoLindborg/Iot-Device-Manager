@@ -12,6 +12,11 @@
   box-shadow:  0 0.25rem 0.625rem -0.125rem #000000;
 }
 
+.channel-list-component-container:hover {
+  background: rgb(255, 255, 255);
+  background: linear-gradient(180deg, #1e232e 0%, #2f3e47 100%);
+}
+
 .channel-list-component-img {
   max-width: 3.125rem;
   object-fit: contain;

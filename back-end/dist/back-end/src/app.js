@@ -24,8 +24,20 @@ const SubscribedChannel_1 = require("./schemas/SubscribedChannel");
 const db_1 = __importDefault(require("./config/db"));
 const deviceRoutes_1 = require("./routes/deviceRoutes");
 const channelRoutes_1 = require("./routes/channelRoutes");
-const websocket_1 = __importDefault(require("./websocket/websocket"));
-const { wss } = (0, websocket_1.default)();
+const wss = new ws_1.default.Server({ port: 8080 });
+wss.on('connection', (ws) => {
+    console.log('new client connected');
+    ws.on('message', (data) => {
+        console.log(`Client has sent us: ${data}`);
+    });
+    ws.on('close', () => {
+        console.log('the client has connected');
+    });
+    ws.onerror = function () {
+        console.log('Some Error occurred');
+    };
+});
+console.log('The WebSocket server is running on port 8080');
 const topics = [GlobalVariables_1.originalTopic];
 (0, db_1.default)();
 app.use('/api/devices', deviceRoutes_1.router);
@@ -48,10 +60,12 @@ client.on('connect', () => {
     });
 });
 client.on('message', (topic, payload) => {
-    console.log(topic);
+    console.log(topic, 'asdasdas');
     if (topic == 'ANNOUNCEMENTS') {
         const message = JSON.parse(payload.toString());
+        console.log('saataana');
         Device_1.Device.findById(message._id, (err, docs) => {
+            console.log('error', docs);
             if (err) {
                 Device_1.Device.create({
                     name: message.deviceName,
@@ -81,10 +95,21 @@ client.on('message', (topic, payload) => {
                 }
             });
         });
-        console.log(`Received message from topic: ${topic} reading out: ${message.channels[0]} ${message.channels[1]}`);
+        console.log(`Received message from topic: asdasda ${topic} reading out: ${message.channels[0]} ${message.channels[1]}`);
     }
     else {
-        const message = Device_1.Device.findOneAndUpdate();
+        const message = JSON.parse(payload.toString());
+        Device_1.Device.findOneAndUpdate({ _id: message._id }, {
+            $push: {
+                sensors: [
+                    {
+                        name: message.sensorType,
+                        sensorValue: message.sensorValue,
+                        timestamp: message.timestamp,
+                    },
+                ],
+            },
+        });
         wss.clients.forEach((client) => {
             if (client.readyState === ws_1.default.OPEN) {
                 client.send(payload.toString());

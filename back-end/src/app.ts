@@ -1,3 +1,5 @@
+import {ISensorData} from './../../front-end/src/types/sensorDataType'
+import {updateChannel} from './controllers/channelController'
 import {ifAnnouncements} from './types/announcementType'
 import express from 'express'
 import 'dotenv/config'
@@ -9,23 +11,14 @@ import WebSocket from 'ws'
 import mongoose from 'mongoose'
 import {Device} from './schemas/Device'
 import {SubscribedChannel} from './schemas/SubscribedChannel'
-import { IDevice } from './types/deviceType'
+import {IDevice} from './types/deviceType'
 import connectDB from './config/db'
 import {router as deviceRoutes} from './routes/deviceRoutes'
 import {router as channelRoutes} from './routes/channelRoutes'
-import { getDevices } from './controllers/deviceController'
+import {getDevices} from './controllers/deviceController'
+import WebSocketClient from './websocket/websocket'
 
 const wss = new WebSocket.Server({port: 8080})
-const topics = [originalTopic]
-
-connectDB()
-
-app.use('/api/devices', deviceRoutes)
-app.use('/api/channels', channelRoutes)
-
-app.get('/', (req, res) => {
-  res.send('Hello World!')
-})
 
 wss.on('connection', (ws) => {
   console.log('new client connected')
@@ -39,8 +32,17 @@ wss.on('connection', (ws) => {
     console.log('Some Error occurred')
   }
 })
-
 console.log('The WebSocket server is running on port 8080')
+const topics = [originalTopic]
+
+connectDB()
+
+app.use('/api/devices', deviceRoutes)
+app.use('/api/channels', channelRoutes)
+
+app.get('/', (req, res) => {
+  res.send('Hello World!')
+})
 
 const client = mqtt.connect(connectUrl, {
   clientId,
@@ -59,27 +61,78 @@ client.on('connect', () => {
 })
 
 client.on('message', (topic, payload) => {
-  console.log(topic)
+  console.log('topiikki', topic, payload.toString())
   if (topic == 'ANNOUNCEMENTS') {
     const message: ifAnnouncements = JSON.parse(payload.toString())
-    const channels = message.channels.split(', ')
-    channels.forEach((channel) => {
-      if (!topics.includes(channel)) {
+    console.log(message._id)
+    Device.find({_id: message._id}, (err, docs) => {
+      console.log('error', err, docs)
+      if (docs.length == 0) {
+        Device.create({
+          name: message.deviceName,
+          _id: message._id,
+          trustedState: 1,
+          channels: message.channels,
+          history: [
+            {
+              name: message.deviceName,
+              timestamp: message.timestamp,
+              trustedState: 1,
+            },
+          ],
+        })
+      }
+    })
+    message.channels.forEach((channel) => {
+      if(!topics.includes(channel)) {
+        topics.push(channel)
         client.subscribe([channel], () => {
           console.log(`Subscribe to topic ${channel}`)
         })
-        topics.push(channel)
       }
+
+      SubscribedChannel.findOneAndUpdate(
+        {name: channel},
+        {$push: {devices: message._id}},
+        (err, docs) => {
+          if (!docs) {
+            SubscribedChannel.create({
+              name: channel,
+              devices: message._id,
+            })
+          } else {
+            console.log(docs)
+          }
+        }
+      )
     })
     console.log(
-      `Received message from topic: ${topic} reading out: ${channels[0]} ${channels[1]}`
+      `Received message from topic: asdasda ${topic} reading out: ${message.channels[0]} ${message.channels[1]}`
     )
   } else {
+    console.log('topiikki 2', topic)
+    const message: ISensorData = JSON.parse(payload.toString())
+    Device.findOneAndUpdate(
+      {_id: message._id},
+      {
+        $push: {
+          sensors: [
+            {
+              sensorType: message.sensorType,
+              sensorValue: message.sensorValue,
+              timestamp: message.timestamp,
+            },
+          ],
+        },
+      }, (err, docs) => {
+        console.log(docs)
+      }
+    )
     wss.clients.forEach((client) => {
       if (client.readyState === WebSocket.OPEN) {
-        client.send(payload.toString());
+        client.send(payload.toString())
       }
-    });
+    })
     console.log(
       `Received message from topic: ${topic} reading out: ${payload.toString()}`
     )
@@ -94,27 +147,28 @@ app.listen(port, () => {
 
 async function testDb() {
   const testDevice = await Device.create({
-      name: 'First Device',
-      trustedState: 1,
-      channels: ['Test Channel'],
-      history: [
+    name: 'First Device',
+    _id: '123daj9',
+    trustedState: 1,
+    channels: ['Test Channel'],
+    history: [
+      {
+        name: 'First Device',
+        timestamp: 1649248380,
+        trustedState: 1,
+      },
+    ],
+    sensors: [
+      {
+        name: 'Temperature',
+        sensorData: [
           {
-              name: 'First Device',
-              timestamp: 1649248380,
-              trustedState: 1,
+            sensorValue: 25,
+            timestamp: 1649248380,
           },
-      ],
-      sensors: [
-          {
-              name: 'Temperature',
-              sensorData: [
-                  {
-                      sensorValue: 25,
-                      timestamp: 1649248380,
-                  },
-              ],
-          },
-      ],
+        ],
+      },
+    ],
   })
 
   const testChannels = await SubscribedChannel.create({

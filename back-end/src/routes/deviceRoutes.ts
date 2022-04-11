@@ -1,7 +1,13 @@
-import express from "express"
-import {getDevices, setDevice, updateDevice, deleteDevice} from '../controllers/deviceController'
+import express from 'express'
+import {
+  getDevices,
+  setDevice,
+  updateDevice,
+  deleteDevice,
+  getDevice,
+} from '../controllers/deviceController'
 
 export const router = express.Router()
 
 router.route('/').get(getDevices).post(setDevice)
-router.route('/:id').delete(deleteDevice).put(updateDevice)
+router.route('/:id').delete(deleteDevice).put(updateDevice).get(getDevice)

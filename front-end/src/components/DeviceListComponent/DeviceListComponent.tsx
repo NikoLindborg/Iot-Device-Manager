@@ -2,16 +2,25 @@ import React from 'react'
 import './DeviceListComponent.css'
 
 interface DeviceListProps {
+  id: string
   componentItems: {
     icon: string
     label: string
     info: string
   }
+  clickHandler: Function
 }
 
-const DeviceListComponent: React.FC<DeviceListProps> = ({componentItems}) => {
+const DeviceListComponent: React.FC<DeviceListProps> = ({
+  componentItems,
+  clickHandler,
+  id,
+}) => {
   return (
-    <div className="device-list-component-container">
+    <div
+      onClick={() => clickHandler(id)}
+      className="device-list-component-container"
+    >
       <div className="device-list-component-left">
         <img
           className="device-list-component-img"

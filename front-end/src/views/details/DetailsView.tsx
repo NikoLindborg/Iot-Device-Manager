@@ -5,6 +5,7 @@ import MobileNavigationComponent from '../../components/navigation/mobile/Mobile
 import NavigationComponent from '../../components/navigation/NavigationComponent'
 import './DetailsView.css'
 import {useDevices} from '../../hooks/ApiHooks'
+import { IDevice } from '../../types/deviceType'
 
 interface DetailsViewProps {
   id?: string
@@ -14,8 +15,9 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
   const [isMobile, setIsMobile] = useState(() => {
     return window.innerWidth > 1000 ? false : true
   })
-  const {devices} = useDevices()
+  const {fetchDevice} = useDevices()
   const [open, setOpen] = useState(false)
+  const [device, setDevice] = useState<IDevice>()
 
   const handleResize = () => {
     window.innerWidth > 1000 ? setIsMobile(false) : setIsMobile(true)
@@ -23,13 +25,27 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
 
   useEffect(() => {
     window.addEventListener('resize', handleResize)
+    console.log('asd')
+    const fetch = async () => {
+      try {
+        if(id) {
+          const fetchedDevice = await fetchDevice(id)
+          setDevice(fetchedDevice)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetch()
   }, [])
+  useEffect(() => {
+    console.log(device)
+  }, [device])
 
   const toggleMenu = () => {
     setOpen(!open)
   }
 
-  const device = devices.find((device) => device._id === id)
 
   return (
     <div className="details-view-container">

@@ -16,8 +16,12 @@ const deviceSchema = new Schema<IDevice>({
   sensors: [
     {
       sensorType: String,
-      sensorValue: String,
-      timestamp: String,
+      sensorData: [
+        {
+          sensorValue: String,
+          timestamp: String,
+        },
+      ],
     },
   ],
 })

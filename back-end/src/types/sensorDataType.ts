@@ -1,6 +1,6 @@
 export interface ISensorData {
   sensorValue: string
-  sensorType: string
   timestamp: string
+  sensorType: string
   _id?: string
 }

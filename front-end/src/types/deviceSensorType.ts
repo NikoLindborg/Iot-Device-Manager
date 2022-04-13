@@ -1,7 +1,7 @@
 import {ISensorData} from './sensorDataType'
 
 export interface IDeviceSensor {
-  name: string
+  sensorType: string
   sensorData?: ISensorData[]
   _id?: Object
 }

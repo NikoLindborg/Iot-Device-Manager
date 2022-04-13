@@ -2,11 +2,18 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import './index.css'
 import App from './App'
+import {BrowserRouter, Routes, Route} from 'react-router-dom'
+import DeviceDetails from './routes/deviceDetails'
 
 ReactDOM.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>,
+  <BrowserRouter>
+    <React.StrictMode>
+      <Routes>
+        <Route path="/" element={<App />}></Route>
+        <Route path=":deviceId" element={<DeviceDetails />} />
+      </Routes>
+    </React.StrictMode>
+  </BrowserRouter>,
 
   document.getElementById('root')
 )

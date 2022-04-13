@@ -10,6 +10,7 @@ import ChannelIcon from '../../assets/icons/channel_icon.svg'
 import StatusRedIcon from '../../assets/icons/status_red.svg'
 import './BaseView.css'
 import {useDevices} from '../../hooks/ApiHooks'
+import {Link} from 'react-router-dom'
 
 const BaseView: React.FC = () => {
   const [isMobile, setIsMobile] = useState(() => {
@@ -31,7 +32,7 @@ const BaseView: React.FC = () => {
   }
 
   const handleClick = (id: string) => {
-    console.log(id)
+    console.log(`device id, ${id}`)
   }
 
   return (
@@ -59,16 +60,22 @@ const BaseView: React.FC = () => {
           }}
         />
         {devices.map((device) => (
-          <DeviceListComponent
-            id={device._id}
+          <Link
+            to={`/${device._id}`}
             key={device._id}
-            componentItems={{
-              icon: StatusRedIcon,
-              label: device.name,
-              info: 'Device is Offline',
-            }}
-            clickHandler={handleClick}
-          />
+            style={{textDecoration: 'none'}}
+          >
+            <DeviceListComponent
+              id={device._id}
+              key={device._id}
+              componentItems={{
+                icon: StatusRedIcon,
+                label: device.name,
+                info: 'Device is Offline',
+              }}
+              clickHandler={handleClick}
+            />
+          </Link>
         ))}
       </div>
     </div>

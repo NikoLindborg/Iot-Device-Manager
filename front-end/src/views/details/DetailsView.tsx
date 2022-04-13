@@ -5,7 +5,8 @@ import MobileNavigationComponent from '../../components/navigation/mobile/Mobile
 import NavigationComponent from '../../components/navigation/NavigationComponent'
 import './DetailsView.css'
 import {useDevices} from '../../hooks/ApiHooks'
-import { IDevice } from '../../types/deviceType'
+import {IDevice} from '../../types/deviceType'
+import DetailComponent from '../../components/DetailComponent/DetailComponent'
 
 interface DetailsViewProps {
   id?: string
@@ -18,6 +19,7 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
   const {fetchDevice} = useDevices()
   const [open, setOpen] = useState(false)
   const [device, setDevice] = useState<IDevice>()
+  const [trustedState, setTrustedState] = useState('')
 
   const handleResize = () => {
     window.innerWidth > 1000 ? setIsMobile(false) : setIsMobile(true)
@@ -28,7 +30,7 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
     console.log('asd')
     const fetch = async () => {
       try {
-        if(id) {
+        if (id) {
           const fetchedDevice = await fetchDevice(id)
           setDevice(fetchedDevice)
         }
@@ -38,14 +40,26 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
     }
     fetch()
   }, [])
+
   useEffect(() => {
-    console.log(device)
+    if (device) {
+      if (device.trustedState) {
+        if (device.trustedState == 0) {
+          setTrustedState('Online')
+        }
+        if (device.trustedState == 1) {
+          setTrustedState('Offline')
+        }
+        if (device.trustedState == 2) {
+          setTrustedState('Untrusted')
+        }
+      }
+    }
   }, [device])
 
   const toggleMenu = () => {
     setOpen(!open)
   }
-
 
   return (
     <div className="details-view-container">
@@ -62,9 +76,35 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
           </>
         )}
       </div>
+
       <div className="details-view-content-container">
-        <p>Device name: {device?.name}</p>
-        <p> Device id: {device?._id}</p>
+        <div className="details-view-header">
+          <h1>{device?.name}</h1>
+          <p>{device?._id}</p>
+        </div>
+        <div className="details-view-body">
+          {device?.trustedState ? (
+            <DetailComponent
+              componentItems={{
+                label: trustedState,
+              }}
+            />
+          ) : (
+            <></>
+          )}
+          {device?.sensors ? (
+            device.sensors.map((sensor) => (
+              <DetailComponent
+                key={device._id}
+                componentItems={{
+                  label: sensor.name,
+                }}
+              />
+            ))
+          ) : (
+            <></>
+          )}
+        </div>
       </div>
     </div>
   )

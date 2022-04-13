@@ -7,6 +7,10 @@ import './DetailsView.css'
 import {useDevices} from '../../hooks/ApiHooks'
 import {IDevice} from '../../types/deviceType'
 import DetailComponent from '../../components/DetailComponent/DetailComponent'
+import StatusRedIcon from '../../assets/icons/status_red.svg'
+import StatusGreenIcon from '../../assets/icons/status_green.svg'
+import StatusYellowIcon from '../../assets/icons/status_yellow.svg'
+import DataGraph from '../../components/DataGraph/DataGraph'
 
 interface DetailsViewProps {
   id?: string
@@ -19,7 +23,8 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
   const {fetchDevice} = useDevices()
   const [open, setOpen] = useState(false)
   const [device, setDevice] = useState<IDevice>()
-  const [trustedState, setTrustedState] = useState('')
+  // const [trustedState, setTrustedState] = useState('')
+  const [statusIcon, setStatusIcon] = useState('')
 
   const handleResize = () => {
     window.innerWidth > 1000 ? setIsMobile(false) : setIsMobile(true)
@@ -27,7 +32,6 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
 
   useEffect(() => {
     window.addEventListener('resize', handleResize)
-    console.log('asd')
     const fetch = async () => {
       try {
         if (id) {
@@ -45,17 +49,20 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
     if (device) {
       if (device.trustedState) {
         if (device.trustedState == 0) {
-          setTrustedState('Online')
+          // setTrustedState('Online')
+          setStatusIcon(StatusGreenIcon)
         }
         if (device.trustedState == 1) {
-          setTrustedState('Offline')
+          // setTrustedState('Offline')
+          setStatusIcon(StatusRedIcon)
         }
         if (device.trustedState == 2) {
-          setTrustedState('Untrusted')
+          // setTrustedState('Untrusted')
+          setStatusIcon(StatusYellowIcon)
         }
       }
     }
-  }, [device])
+  }, [device?.trustedState])
 
   const toggleMenu = () => {
     setOpen(!open)
@@ -79,31 +86,35 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
 
       <div className="details-view-content-container">
         <div className="details-view-header">
+          <img className="details-view-status-img" src={statusIcon}></img>
           <h1>{device?.name}</h1>
-          <p>{device?._id}</p>
         </div>
         <div className="details-view-body">
-          {device?.trustedState ? (
-            <DetailComponent
-              componentItems={{
-                label: trustedState,
+          <div className="details-view-graph-container">
+            <DataGraph
+              dataGraphItems={{
+                device: device,
               }}
-            />
-          ) : (
-            <></>
-          )}
-          {device?.sensors ? (
-            device.sensors.map((sensor) => (
-              <DetailComponent
-                key={device._id}
-                componentItems={{
-                  label: sensor.name,
-                }}
-              />
-            ))
-          ) : (
-            <></>
-          )}
+            ></DataGraph>
+          </div>
+          <div className="details-view-component-header">
+            <h1>Sort by</h1>
+          </div>
+          <div className="details-view-component-container">
+            {device?.sensors ? (
+              device.sensors.map((sensor) => (
+                <DetailComponent
+                  // should probably be sensor._id
+                  key={device._id}
+                  componentItems={{
+                    label: sensor.name,
+                  }}
+                />
+              ))
+            ) : (
+              <></>
+            )}
+          </div>
         </div>
       </div>
     </div>

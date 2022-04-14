@@ -1,0 +1,61 @@
+.dropdown-button {
+  width: 21.938rem;
+  height: 5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+  font-size: 1.375rem;
+  font-weight: bold;
+  background-color: unset;
+  border: unset;
+  color: white;
+}
+
+.dropdown-button-container {
+  display: flex;
+  width: 100%;
+  justify-content: space-between;
+}
+
+.dropdown-list {
+  width: 21.938rem;
+  height: 2.5rem;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+
+.dropdown-list-content {
+  display: none;
+}
+
+.dropdown-list-content-active {
+  display: block;
+  z-index: 1;
+  height: 12.5rem;
+  overflow: scroll;
+  position: absolute;
+}
+
+.dropdown-list {
+  padding-left: 1em;
+}
+
+.active {
+  font-weight: bold;
+}
+
+.arrow-container {
+  display: flex;
+  align-items: center;
+}
+
+.arrow {
+  border: solid white;
+  border-width: 0 3px 3px 0;
+  display: inline-block;
+  padding: 4px;
+  transform: rotate(45deg);
+}

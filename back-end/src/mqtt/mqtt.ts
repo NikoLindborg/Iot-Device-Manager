@@ -31,7 +31,7 @@ const mqttClient = () => {
 
   client.on('connect', () => {
     console.log('connected')
-    dbTobics().then(() => {
+    dbTopics().then(() => {
       topics.forEach((topic) => {
         client.subscribe(topic, () => {
           console.log(`Subscribed to topic ${topic}`)

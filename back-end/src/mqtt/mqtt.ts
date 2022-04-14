@@ -14,7 +14,7 @@ import WebSocketClient from '../websocket/websocket'
 const mqttClient = () => {
   const {wss} = WebSocketClient()
   const topics = [originalTopic]
-  const dbTobics = async () => {
+  const dbTopics = async () => {
     const fetchedTopics = await SubscribedChannel.find({})
     fetchedTopics.forEach((topic) => {
       topics.push(topic.name)

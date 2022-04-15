@@ -22,8 +22,8 @@ const DropDown: React.FC<DropDownProps> = ({
       setIsDropDownOpen(false)
     }
   }
-  const handleChange = (channel: string, index: number) => {
-    setSelectedElement(channel)
+  const handleChange = (element: string, index: number) => {
+    setSelectedElement(element)
     setSelectedElementIndex(index)
     handleClick()
   }
@@ -49,8 +49,8 @@ const DropDown: React.FC<DropDownProps> = ({
           <button
             className={
               selectedElementIndex == i
-                ? 'dropdown-list active'
-                : 'dropdown-list'
+                ? 'dropdown-list-element active'
+                : 'dropdown-list-element'
             }
             key={i}
             onClick={() => {

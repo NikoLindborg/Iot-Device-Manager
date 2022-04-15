@@ -70,14 +70,15 @@ const sensorService = (message: ISensorData) => {
     {_id: message._id, sensorType: message.sensorType},
     (err, docs) => {
       let rightDoc: IDeviceSensor
-      docs.sensors.forEach((sensor) => {
+      docs?.sensors.forEach((sensor) => {
         if (sensor.sensorType == message.sensorType) {
           rightDoc = sensor
         }
       })
 
+
       if (!rightDoc) {
-        docs.sensors.push({
+        docs?.sensors.push({
           sensorType: message.sensorType,
           sensorData: [
             {
@@ -92,7 +93,7 @@ const sensorService = (message: ISensorData) => {
           timestamp: message.timestamp,
         })
       }
-      docs.save()
+      docs?.save()
     }
   )
 }

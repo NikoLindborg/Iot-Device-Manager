@@ -18,13 +18,14 @@
   justify-content: space-between;
 }
 
-.dropdown-list {
+.dropdown-list-element {
   width: 21.938rem;
   height: 2.5rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
+  padding-left: 1em;
 }
 
 .dropdown-list-content {
@@ -37,10 +38,6 @@
   height: 12.5rem;
   overflow: scroll;
   position: absolute;
-}
-
-.dropdown-list {
-  padding-left: 1em;
 }
 
 .active {

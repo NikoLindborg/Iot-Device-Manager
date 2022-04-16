@@ -2,17 +2,10 @@ import {IDevice} from '../types/deviceType'
 import {useState, useEffect} from 'react'
 import {wsLocalHostUrl, apiUrl} from '../globals/globals'
 
-export const useWebSocket = () => {
-  const [data, setData] = useState([''])
+export const useDevices = () => {
+  const [devices, setDevices] = useState<IDevice[]>([])
   const [connection, setConnection] = useState<WebSocket>()
-  const handleData = (newData: string) => {
-    setData((data) => {
-      return {
-        ...data,
-        newData,
-      }
-    })
-  }
+
   useEffect(() => {
     const server = new WebSocket(wsLocalHostUrl)
     setConnection(server)
@@ -23,16 +16,13 @@ export const useWebSocket = () => {
       console.log(`WebSocket error: ${error}`)
     }
 
-    connection.onmessage = (e) => {
-      handleData(e.data.toString())
+    connection.onmessage = (device) => {
+      console.log(device)
+      const newDevice = JSON.parse(device.data as unknown as string) as IDevice
+      console.log('asda', newDevice)
+      setDevices([...devices, newDevice])
     }
   }
-  return {data}
-}
-
-export const useDevices = () => {
-  const [devices, setDevices] = useState<IDevice[]>([])
-
   useEffect(() => {
     fetchDevices()
   }, [])

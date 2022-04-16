@@ -1,4 +1,4 @@
-import React, {useState} from 'react'
+import React, {useEffect, useRef, useState} from 'react'
 import './DropDown.css'
 
 interface DropDownProps {
@@ -14,23 +14,34 @@ const DropDown: React.FC<DropDownProps> = ({
 }) => {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false)
   const [selectedElementIndex, setSelectedElementIndex] = useState(0)
+  const dropDownRef = useRef<HTMLDivElement>(null)
+  const [dropDownContentWidth, setDropDownContentWidth] = useState(0)
 
   const handleClick = () => {
-    if (isDropDownOpen == false) {
-      setIsDropDownOpen(true)
-    } else {
-      setIsDropDownOpen(false)
-    }
+    setIsDropDownOpen(!isDropDownOpen)
   }
+
   const handleChange = (element: string, index: number) => {
     setSelectedElement(element)
     setSelectedElementIndex(index)
     handleClick()
   }
 
+  useEffect(() => {
+    setDropDownContentWidth(dropDownRef.current?.offsetWidth as number)
+    window.addEventListener('resize', handleResize)
+  }, [])
+
+  const handleResize = () => {
+    setDropDownContentWidth(dropDownRef.current?.offsetWidth as number)
+  }
+
   return (
-    <div className="dropdown-wrapper">
-      <button className="dropdown-button" onClick={handleClick}>
+    <div ref={dropDownRef} className="dropdown-wrapper">
+      <button
+        className={isDropDownOpen ? 'dropdown-button open' : 'dropdown-button'}
+        onClick={handleClick}
+      >
         <div className="dropdown-button-container">
           <div className="dropdown-button-text">{selectedElement}</div>{' '}
           <div className="arrow-container">
@@ -40,10 +51,11 @@ const DropDown: React.FC<DropDownProps> = ({
       </button>
       <div
         className={
-          isDropDownOpen == true
+          isDropDownOpen
             ? 'dropdown-list-content-active'
             : 'dropdown-list-content'
         }
+        style={{width: dropDownContentWidth}}
       >
         {elements.map((e, i) => (
           <button

@@ -16,10 +16,15 @@ const BaseView: React.FC = () => {
   const {devices} = useDevices()
   const [open, setOpen] = useState(false)
 
-  //  Variables needed for DropDown
-  const initialChannel = 'All Devices'
+  //  Variables needed for Channel DropDown
+  const initialChannel = 'All Channels'
   const [selectedChannel, setSelectedChannel] = useState(initialChannel)
   const listOfChannels = [initialChannel]
+
+  //  Variables needed for Device DropDown
+  const initialStatus = 'All Devices'
+  const [selectedStatus, setSelectedStatus] = useState(initialStatus)
+  const listOfStatus = [initialStatus, 'Trusted', 'Offline', 'Untrusted']
 
   const handleResize = () => {
     window.innerWidth > 1000 ? setIsMobile(false) : setIsMobile(true)
@@ -61,12 +66,24 @@ const BaseView: React.FC = () => {
       </div>
       <div className="base-view-content-container">
         {/* Content comes here */}
-        <DropDown
-          elements={listOfChannels}
-          selectedElement={selectedChannel}
-          setSelectedElement={setSelectedChannel}
+        <div className="device-list-title">Devices</div>
+        <div className="dropdown-base-container">
+          <DropDown
+            elements={listOfStatus}
+            selectedElement={selectedStatus}
+            setSelectedElement={setSelectedStatus}
+          />
+          <DropDown
+            elements={listOfChannels}
+            selectedElement={selectedChannel}
+            setSelectedElement={setSelectedChannel}
+          />
+        </div>
+        <DeviceList
+          devices={devices}
+          selectedChannel={selectedChannel}
+          selectedStatus={selectedStatus}
         />
-        <DeviceList devices={devices} selectedChannel={selectedChannel} />
       </div>
     </div>
   )

@@ -16,12 +16,10 @@ const StatusComponent: React.FC<StatusComponentProps> = ({devices}) => {
 
   const statusData = {
     totalDeviceAmount: devices.length,
-    trustedDeviceAmount: calculateDeviceStatuses(0),
-    offlineDeviceAmount: calculateDeviceStatuses(1),
-    untrustedDeviceAmount: calculateDeviceStatuses(2),
+    trustedDeviceAmount: calculateDeviceStatuses(1),
+    offlineDeviceAmount: calculateDeviceStatuses(2),
+    untrustedDeviceAmount: calculateDeviceStatuses(3),
   }
-
-  console.log(statusData)
 
   const statusComponentData = {
     datasets: [

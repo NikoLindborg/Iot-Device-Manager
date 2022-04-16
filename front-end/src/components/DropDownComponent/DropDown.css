@@ -1,15 +1,28 @@
+.dropdown-wrapper {
+  width: -webkit-fill-available;
+  margin: 0.75rem;
+}
+
 .dropdown-button {
-  width: 21.938rem;
-  height: 5rem;
+  width: -webkit-fill-available;
+  min-width: 10rem;
+  height: 3.5rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  font-size: 1.375rem;
+  font-size: 1rem;
   font-weight: bold;
-  background-color: unset;
-  border: unset;
+  background-color: #2F3E47;
+  border: 0.125rem #C4C4C4 solid;
   color: white;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+}
+
+.open {
+  margin-bottom: 0;
+  border-radius: 0.5rem 0.5rem 0 0;
 }
 
 .dropdown-button-container {
@@ -19,13 +32,22 @@
 }
 
 .dropdown-list-element {
-  width: 21.938rem;
-  height: 2.5rem;
+  width: 100%;
+  height: 3.5rem;
   display: flex;
   flex-direction: column;
   align-items: flex-start;
   justify-content: center;
-  padding-left: 1em;
+  padding-left: 1.5rem;
+  background-color: #2F3E47;
+  color: white;
+  border: none;
+  border-bottom: #c2c2c2 solid;
+  font-size: 1rem;
+}
+
+.dropdown-list-element:hover {
+  animation: zoomText 0.2s forwards;
 }
 
 .dropdown-list-content {
@@ -35,13 +57,17 @@
 .dropdown-list-content-active {
   display: block;
   z-index: 1;
-  height: 12.5rem;
-  overflow: scroll;
+  max-height: 17.5rem;
+  overflow-y: scroll;
   position: absolute;
+  border: 0.125rem #c2c2c2 solid;
+  border-radius: 0 0 0.5rem 0.5rem;
+  box-shadow: 0 0.75rem 1rem #000;
 }
 
 .active {
   font-weight: bold;
+  background-color: #5a7585;
 }
 
 .arrow-container {
@@ -55,4 +81,31 @@
   display: inline-block;
   padding: 4px;
   transform: rotate(45deg);
+}
+
+@keyframes zoomText {
+  0% {
+    font-size: 1rem;
+  }
+  100% {
+    font-size: 1.1rem;
+  }
+}
+
+@media only screen and (min-width: 1000px) {
+  .dropdown-wrapper {
+    max-width: 15rem;
+  }
+}
+
+@media only screen and (max-width: 1000px) {
+  .dropdown-wrapper {
+    max-width: 21.98rem;
+  }
+}
+
+@media only screen and (max-width: 500px) {
+  .dropdown-wrapper {
+    max-width: 100%;
+  }
 }

@@ -1,23 +1,30 @@
 import React, {useEffect, useState} from 'react'
-import ChannelListComponent from '../../components/ChannelListComponent/ChannelListComponent'
-import DeviceListComponent from '../../components/DeviceListComponent/DeviceListComponent'
 import MenuComponent from '../../components/menu/MenuComponent'
 import MobileMenuComponent from '../../components/menu/mobile/MobileMenuComponent'
 import MobileNavigationComponent from '../../components/navigation/mobile/MobileNavigationComponent'
 import NavigationComponent from '../../components/navigation/NavigationComponent'
 import StatusComponent from '../../components/StatusComponent/StatusComponent'
-import ChannelIcon from '../../assets/icons/channel_icon.svg'
-import StatusRedIcon from '../../assets/icons/status_red.svg'
 import './BaseView.css'
-import {useDevices} from '../../hooks/ApiHooks'
-import {Link} from 'react-router-dom'
+import {useChannels, useDevices} from '../../hooks/ApiHooks'
+import DropDown from '../../components/DropDownComponent/DropDown'
+import DeviceList from '../../components/DeviceList/DeviceList'
 
 const BaseView: React.FC = () => {
   const [isMobile, setIsMobile] = useState(() => {
     return window.innerWidth > 1000 ? false : true
   })
   const {devices} = useDevices()
+  const {channels} = useChannels()
   const [open, setOpen] = useState(false)
+
+  //  Variables needed for Channel DropDown
+  const initialChannel = 'All Channels'
+  const [selectedChannel, setSelectedChannel] = useState(initialChannel)
+
+  //  Variables needed for Device DropDown
+  const initialStatus = 'All Devices'
+  const [selectedStatus, setSelectedStatus] = useState(initialStatus)
+  const listOfStatus = ['Trusted', 'Offline', 'Untrusted']
 
   const handleResize = () => {
     window.innerWidth > 1000 ? setIsMobile(false) : setIsMobile(true)
@@ -31,10 +38,6 @@ const BaseView: React.FC = () => {
     setOpen(!open)
   }
 
-  const handleClick = (id: string) => {
-    console.log(`device id, ${id}`)
-  }
-
   return (
     <div className="base-view-container">
       <div>
@@ -42,41 +45,39 @@ const BaseView: React.FC = () => {
           <>
             <MobileNavigationComponent toggleMenu={toggleMenu} />
             {open && <MobileMenuComponent />}
+            <div className="mobile-status-container">
+              <StatusComponent devices={devices} />
+            </div>
           </>
         ) : (
           <>
             <NavigationComponent />
-            <MenuComponent />
+            <MenuComponent devices={devices} />
           </>
         )}
       </div>
       <div className="base-view-content-container">
         {/* Content comes here */}
-        <StatusComponent />
-        <ChannelListComponent
-          componentItems={{
-            icon: ChannelIcon,
-            label: 'Temperature',
-          }}
+        <div className="device-list-title">Devices</div>
+        <div className="dropdown-base-container">
+          <DropDown
+            elements={listOfStatus}
+            selectedElement={selectedStatus}
+            setSelectedElement={setSelectedStatus}
+            initialElement={initialStatus}
+          />
+          <DropDown
+            elements={channels}
+            selectedElement={selectedChannel}
+            setSelectedElement={setSelectedChannel}
+            initialElement={initialChannel}
+          />
+        </div>
+        <DeviceList
+          devices={devices}
+          selectedChannel={selectedChannel}
+          selectedStatus={selectedStatus}
         />
-        {devices.map((device) => (
-          <Link
-            to={`/${device._id}`}
-            key={device._id}
-            style={{textDecoration: 'none'}}
-          >
-            <DeviceListComponent
-              id={device._id}
-              key={device._id}
-              componentItems={{
-                icon: StatusRedIcon,
-                label: device.name,
-                info: 'Device is Offline',
-              }}
-              clickHandler={handleClick}
-            />
-          </Link>
-        ))}
       </div>
     </div>
   )

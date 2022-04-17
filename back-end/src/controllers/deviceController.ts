@@ -14,6 +14,7 @@ export const getDevices = async (req, res) => {
 }
 
 export const getDevice = async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
   try {
     const device = await Device.findById(req.params.id)
     res.status(200).json(device)

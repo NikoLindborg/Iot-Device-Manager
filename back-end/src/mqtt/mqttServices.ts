@@ -1,9 +1,9 @@
 import {Device} from '../schemas/Device'
 import {SubscribedChannel} from '../schemas/SubscribedChannel'
-import {IDeviceSensor} from '../types/deviceSensorType'
 import {ISensorData} from '../types/sensorDataType'
 import {ifAnnouncements} from './../types/announcementType'
 import WebSocket from 'ws'
+import { SensorData } from '../schemas/sensorData'
 
 const announcementService = (
   message: ifAnnouncements,
@@ -66,35 +66,12 @@ const announcementService = (
 }
 
 const sensorService = (message: ISensorData) => {
-  Device.findOne(
-    {_id: message._id, sensorType: message.sensorType},
-    (err, docs) => {
-      let rightDoc: IDeviceSensor
-      docs.sensors.forEach((sensor) => {
-        if (sensor.sensorType == message.sensorType) {
-          rightDoc = sensor
-        }
-      })
-
-      if (!rightDoc) {
-        docs.sensors.push({
-          sensorType: message.sensorType,
-          sensorData: [
-            {
-              sensorValue: message.sensorValue,
-              timestamp: message.timestamp,
-            },
-          ],
-        })
-      } else {
-        rightDoc.sensorData.push({
-          sensorValue: message.sensorValue,
-          timestamp: message.timestamp,
-        })
-      }
-      docs.save()
-    }
-  )
+  SensorData.create({
+    deviceId: message._id,
+    sensorValue: message.sensorValue,
+    timestamp: message.timestamp,
+    sensorType: message.sensorType,
+  })
 }
 
 export {announcementService, sensorService}

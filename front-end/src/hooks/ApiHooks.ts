@@ -40,5 +40,11 @@ export const useDevices = () => {
     return data
   }
 
-  return {devices, fetchDevice}
+  const fetchDeviceData = async (id: string) => {
+    const entity = 'sensordata'
+    const response = await fetch(`${apiUrl}/${entity}/${id}`)
+    return await response.json()
+  }
+
+  return {devices, fetchDevice, fetchDeviceData}
 }

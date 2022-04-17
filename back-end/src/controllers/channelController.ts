@@ -3,9 +3,10 @@ import { ISubscribedChannel } from "../types/subscribedChannelType"
 
 /** Return list of all the subscribed channels from MongoDB */
 export const getChannels = async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
     try {
         const channels = await SubscribedChannel.find({})
-        res.status(200).JSON(channels)
+        res.status(200).json(channels)
     } catch (error) {
         console.log(error)
         res.status(400)
@@ -23,7 +24,7 @@ export const setChannel = async (newChannel: ISubscribedChannel, req, res) => {
             name: newChannel.name,
             devices: newChannel.devices
         })
-        res.status(200).JSON(device)
+        res.status(200).json(device)
     } catch (error) {
         console.log(error)
         res.status(400)

@@ -2,20 +2,23 @@ import React, {useEffect, useRef, useState} from 'react'
 import './DropDown.css'
 
 interface DropDownProps {
-  elements: String[]
-  selectedElement: String
+  elements: string[]
+  selectedElement: string
   setSelectedElement: React.Dispatch<React.SetStateAction<string>>
+  initialElement: string
 }
 
 const DropDown: React.FC<DropDownProps> = ({
   elements,
   selectedElement,
   setSelectedElement,
+  initialElement,
 }) => {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false)
   const [selectedElementIndex, setSelectedElementIndex] = useState(0)
-  const dropDownRef = useRef<HTMLDivElement>(null)
   const [dropDownContentWidth, setDropDownContentWidth] = useState(0)
+
+  const dropDownRef = useRef<HTMLDivElement>(null)
 
   const handleClick = () => {
     setIsDropDownOpen(!isDropDownOpen)
@@ -27,6 +30,9 @@ const DropDown: React.FC<DropDownProps> = ({
     handleClick()
   }
 
+  //  Sets the dropdown's open list width to match the initial element
+  //  as it is positioned as absolute and doesn't have a parent element to match the width to
+  //  Does the resizing on first mount and when window size is altered
   useEffect(() => {
     setDropDownContentWidth(dropDownRef.current?.offsetWidth as number)
     window.addEventListener('resize', handleResize)
@@ -57,19 +63,31 @@ const DropDown: React.FC<DropDownProps> = ({
         }
         style={{width: dropDownContentWidth}}
       >
-        {elements.map((e, i) => (
+        <button
+          className={
+            selectedElement == initialElement
+              ? 'dropdown-list-element active'
+              : 'dropdown-list-element'
+          }
+          onClick={() => {
+            handleChange(initialElement, 0)
+          }}
+        >
+          {initialElement}
+        </button>
+        {elements.map((element, index) => (
           <button
             className={
-              selectedElementIndex == i
+              selectedElementIndex == index && selectedElement != initialElement
                 ? 'dropdown-list-element active'
                 : 'dropdown-list-element'
             }
-            key={i}
+            key={index}
             onClick={() => {
-              handleChange(e.toString(), i)
+              handleChange(element.toString(), index)
             }}
           >
-            {e}
+            {element}
           </button>
         ))}
       </div>

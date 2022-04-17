@@ -5,7 +5,7 @@ import MobileNavigationComponent from '../../components/navigation/mobile/Mobile
 import NavigationComponent from '../../components/navigation/NavigationComponent'
 import StatusComponent from '../../components/StatusComponent/StatusComponent'
 import './BaseView.css'
-import {useDevices} from '../../hooks/ApiHooks'
+import {useChannels, useDevices} from '../../hooks/ApiHooks'
 import DropDown from '../../components/DropDownComponent/DropDown'
 import DeviceList from '../../components/DeviceList/DeviceList'
 
@@ -14,17 +14,17 @@ const BaseView: React.FC = () => {
     return window.innerWidth > 1000 ? false : true
   })
   const {devices} = useDevices()
+  const {channels} = useChannels()
   const [open, setOpen] = useState(false)
 
   //  Variables needed for Channel DropDown
   const initialChannel = 'All Channels'
   const [selectedChannel, setSelectedChannel] = useState(initialChannel)
-  const listOfChannels = [initialChannel]
 
   //  Variables needed for Device DropDown
   const initialStatus = 'All Devices'
   const [selectedStatus, setSelectedStatus] = useState(initialStatus)
-  const listOfStatus = [initialStatus, 'Trusted', 'Offline', 'Untrusted']
+  const listOfStatus = ['Trusted', 'Offline', 'Untrusted']
 
   const handleResize = () => {
     window.innerWidth > 1000 ? setIsMobile(false) : setIsMobile(true)
@@ -37,14 +37,6 @@ const BaseView: React.FC = () => {
   const toggleMenu = () => {
     setOpen(!open)
   }
-
-  devices.forEach((device) => {
-    device.channels?.forEach((channel) => {
-      if (!listOfChannels.includes(channel)) {
-        listOfChannels.push(channel)
-      }
-    })
-  })
 
   return (
     <div className="base-view-container">
@@ -72,11 +64,13 @@ const BaseView: React.FC = () => {
             elements={listOfStatus}
             selectedElement={selectedStatus}
             setSelectedElement={setSelectedStatus}
+            initialElement={initialStatus}
           />
           <DropDown
-            elements={listOfChannels}
+            elements={channels}
             selectedElement={selectedChannel}
             setSelectedElement={setSelectedChannel}
+            initialElement={initialChannel}
           />
         </div>
         <DeviceList

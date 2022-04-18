@@ -1,0 +1,23 @@
+.notification-center {
+  width: 21.875rem;
+  height: 28.125rem;
+  background: linear-gradient(180deg, #1E232E 0%, #2A354B 100%);
+  position: absolute;
+  top: 6vh;
+  right: 0.8rem;
+  z-index: 1;
+  border: 0.125rem solid #6C6C6C;
+  box-sizing: border-box;
+  box-shadow: 0px 0.5rem 0.5rem rgba(0, 0, 0, 0.25);
+  border-radius: 0.65rem;
+  color: white;
+  padding: 1rem;
+  overflow-y: scroll;
+}
+
+.notification-header {
+  text-align: left;
+  font-weight: bold;
+  padding-bottom: 1rem;
+  font-size: 1.25rem;
+}

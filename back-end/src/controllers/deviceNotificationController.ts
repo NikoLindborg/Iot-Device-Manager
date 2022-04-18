@@ -5,7 +5,7 @@ import { DeviceNotification } from '../schemas/DeviceNotification';
 export const getDeviceNotifications = async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*')
     try {
-        const notifications = await DeviceNotification.find({})
+        const notifications = await DeviceNotification.find({}).sort({timestamp: -1})
         res.status(200).json(notifications)
     } catch (error) {
         console.log(error)

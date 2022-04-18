@@ -1,7 +1,13 @@
+import {INotification} from './../types/notificationType'
 import {IChannel} from './../types/channelType'
 import {IDevice} from '../types/deviceType'
 import {useState, useEffect} from 'react'
-import {wsLocalHostUrl, apiUrl, channelUrl} from '../globals/globals'
+import {
+  wsLocalHostUrl,
+  apiUrl,
+  channelUrl,
+  notificationUrl,
+} from '../globals/globals'
 
 export const useDevices = () => {
   const [devices, setDevices] = useState<IDevice[]>([])
@@ -69,4 +75,20 @@ export const useChannels = () => {
   }
 
   return {channels}
+}
+
+export const useNotifications = () => {
+  const [notifications, setNotifications] = useState<INotification[]>()
+
+  useEffect(() => {
+    fetchNotifications()
+  }, [])
+
+  const fetchNotifications = async () => {
+    const response = await fetch(notificationUrl)
+    const data = await response.json()
+    setNotifications(data)
+  }
+
+  return {notifications}
 }

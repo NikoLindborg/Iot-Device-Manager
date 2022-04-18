@@ -5,6 +5,7 @@ const port = 3001
 import connectDB from './config/db'
 import {router as deviceRoutes} from './routes/deviceRoutes'
 import {router as channelRoutes} from './routes/channelRoutes'
+import {router as deviceNotificationRoutes} from './routes/deviceNotificationRoutes'
 import WebSocketClient from './websocket/websocket'
 import mqttClient from './mqtt/mqtt'
 
@@ -15,6 +16,7 @@ const mqtt = mqttClient()
 
 app.use('/api/devices', deviceRoutes)
 app.use('/api/channels', channelRoutes)
+app.use('/api/notifications', deviceNotificationRoutes)
 
 app.get('/', (req, res) => {
   res.send('Hello World!')

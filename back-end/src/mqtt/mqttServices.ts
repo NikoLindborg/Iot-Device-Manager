@@ -1,3 +1,4 @@
+import { DeviceNotification } from './../schemas/DeviceNotification';
 import {Device} from '../schemas/Device'
 import {SubscribedChannel} from '../schemas/SubscribedChannel'
 import {ISensorData} from '../types/sensorDataType'
@@ -36,6 +37,15 @@ const announcementService = (
               client.send(JSON.stringify(docs))
             }
           })
+        }
+      )
+      DeviceNotification.create(
+        {
+          deviceId: message._id,
+          deviceName: message.deviceName,
+          deviceChannels: message.channels,
+          timestamp: message.timestamp,
+          title: `Device ${message.deviceName} connected`
         }
       )
     }

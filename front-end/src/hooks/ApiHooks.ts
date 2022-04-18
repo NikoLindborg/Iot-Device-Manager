@@ -1,6 +1,7 @@
+import {IChannel} from './../types/channelType'
 import {IDevice} from '../types/deviceType'
 import {useState, useEffect} from 'react'
-import {wsLocalHostUrl, apiUrl} from '../globals/globals'
+import {wsLocalHostUrl, apiUrl, channelUrl} from '../globals/globals'
 
 export const useDevices = () => {
   const [devices, setDevices] = useState<IDevice[]>([])
@@ -40,5 +41,32 @@ export const useDevices = () => {
     return data
   }
 
-  return {devices, fetchDevice}
+  const fetchDeviceData = async (id: string) => {
+    const entity = 'sensordata'
+    const response = await fetch(`${apiUrl}/${entity}/${id}`)
+    return await response.json()
+  }
+
+  return {devices, fetchDevice, fetchDeviceData}
+}
+
+export const useChannels = () => {
+  const [channels, setChannels] = useState<string[]>([])
+
+  useEffect(() => {
+    fetchChannels()
+  }, [])
+
+  const fetchChannels = async () => {
+    const response = await fetch(channelUrl)
+    const data = await response.json()
+    mapChannelNames(data)
+  }
+
+  const mapChannelNames = (data: IChannel[]) => {
+    const channelNames = data.map((channel) => channel.name)
+    setChannels(channelNames)
+  }
+
+  return {channels}
 }

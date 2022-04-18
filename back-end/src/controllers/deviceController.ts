@@ -1,5 +1,7 @@
 import {Device} from '../schemas/Device'
+import { SensorData } from '../schemas/sensorData'
 import {IDevice} from '../types/deviceType'
+import { ISensorData } from '../types/sensorDataType'
 
 /** Return list of all the devices from MongoDB */
 export const getDevices = async (req, res) => {
@@ -14,12 +16,24 @@ export const getDevices = async (req, res) => {
 }
 
 export const getDevice = async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
   try {
     const device = await Device.findById(req.params.id)
     res.status(200).json(device)
   } catch (error) {
     res.status(404)
     throw new Error ('Device not found!')
+  }
+}
+
+export const getDeviceSensorData = async (req, res) => {
+  res.set('Access-Control-Allow-Origin', '*')
+  try {
+    const sensorData = await SensorData.find({deviceId: req.params.id}) as unknown as ISensorData
+    res.status(200).json(sensorData)
+  } catch (error) {
+    res.status(404)
+    throw new Error ('Data for device not found!')
   }
 }
 

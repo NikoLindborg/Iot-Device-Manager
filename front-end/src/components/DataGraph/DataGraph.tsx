@@ -28,26 +28,7 @@ interface DataGraphProps {
   }
 }
 
-const graphData: {dataType: string; dataList: string[]}[] = [
-  {dataType: 'Humidity', dataList: ['25', '22', '24', '20', '21', '11']},
-]
-
 const DataGraph: React.FC<DataGraphProps> = ({dataGraphItems}) => {
-  useEffect(() => {
-    const test = () => {
-      try {
-        dataGraphItems.device?.sensors?.map((sensor) => {
-          sensor.sensorData?.map((sensorData) => {
-            console.log('timestamp', sensorData.timestamp)
-          })
-        })
-      } catch (error) {
-        console.log(error)
-      }
-    }
-    test()
-  }, [])
-
   const options = {
     responsive: true,
     interaction: {
@@ -78,22 +59,35 @@ const DataGraph: React.FC<DataGraphProps> = ({dataGraphItems}) => {
     },
   }
 
-  const labels = [
-    'January',
-    'February',
-    'March',
-    'April',
-    'May',
-    'June',
-    'July',
-  ]
+  let labels
+  if (dataGraphItems) {
+    if (dataGraphItems.device) {
+      if (dataGraphItems.device.sensors) {
+        labels = dataGraphItems.device?.sensors[0].sensorData?.map((sensor) =>
+          new Date(Number(sensor.timestamp) * 1000).toLocaleString('fi-FI')
+        )
+      }
+    }
+  }
 
+  let graphData
+  if (dataGraphItems) {
+    if (dataGraphItems.device) {
+      if (dataGraphItems.device.sensors) {
+        if (dataGraphItems.device.sensors[0].sensorData) {
+          graphData = dataGraphItems.device?.sensors[0].sensorData.map(
+            (sensor) => sensor.sensorValue
+          )
+        }
+      }
+    }
+  }
   const data = {
     labels,
     datasets: [
       {
-        label: graphData[0].dataType,
-        data: graphData[0].dataList,
+        label: 'GRAPH',
+        data: graphData,
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         yAxisID: 'y',

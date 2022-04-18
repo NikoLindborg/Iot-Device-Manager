@@ -4,6 +4,10 @@
   padding: 0;
 }
 
+body {
+  background-color: #1E232E;
+}
+
 .App {
   text-align: center;
 }

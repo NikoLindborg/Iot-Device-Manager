@@ -1,5 +1,4 @@
 import React, {useEffect, useState} from 'react'
-import MenuComponent from '../../components/menu/MenuComponent'
 import MobileMenuComponent from '../../components/menu/mobile/MobileMenuComponent'
 import MobileNavigationComponent from '../../components/navigation/mobile/MobileNavigationComponent'
 import NavigationComponent from '../../components/navigation/NavigationComponent'
@@ -79,7 +78,8 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
         ) : (
           <>
             <NavigationComponent />
-            <MenuComponent />
+            {/* Commented Menu out to remind to fix detail view not rendering the base view again */}
+            {/* <MenuComponent devices={devices} /> */}
           </>
         )}
       </div>

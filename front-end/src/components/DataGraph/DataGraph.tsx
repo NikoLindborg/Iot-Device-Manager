@@ -10,7 +10,7 @@ import {
   Legend,
 } from 'chart.js'
 import {Line} from 'react-chartjs-2'
-import {IDevice} from '../../types/deviceType'
+import {ISensorData} from '../../types/sensorDataType'
 
 ChartJS.register(
   CategoryScale,
@@ -24,7 +24,7 @@ ChartJS.register(
 
 interface DataGraphProps {
   dataGraphItems: {
-    device?: IDevice
+    deviceData?: ISensorData
   }
 }
 
@@ -39,7 +39,7 @@ const DataGraph: React.FC<DataGraphProps> = ({dataGraphItems}) => {
     plugins: {
       title: {
         display: true,
-        text: dataGraphItems.device?.name,
+        text: 'test',
       },
     },
     scales: {
@@ -59,29 +59,18 @@ const DataGraph: React.FC<DataGraphProps> = ({dataGraphItems}) => {
     },
   }
 
-  let labels
+  const labels = ['ha', 'haa']
+
   if (dataGraphItems) {
-    if (dataGraphItems.device) {
-      if (dataGraphItems.device.sensors) {
-        labels = dataGraphItems.device?.sensors[0].sensorData?.map((sensor) =>
-          new Date(Number(sensor.timestamp) * 1000).toLocaleString('fi-FI')
-        )
-      }
+    if (dataGraphItems.deviceData) {
+      console.log('haha', dataGraphItems.deviceData.sensorType)
+    } else {
+      console.log('hahaa')
     }
   }
 
-  let graphData
-  if (dataGraphItems) {
-    if (dataGraphItems.device) {
-      if (dataGraphItems.device.sensors) {
-        if (dataGraphItems.device.sensors[0].sensorData) {
-          graphData = dataGraphItems.device?.sensors[0].sensorData.map(
-            (sensor) => sensor.sensorValue
-          )
-        }
-      }
-    }
-  }
+  const graphData = ['21', '22']
+
   const data = {
     labels,
     datasets: [

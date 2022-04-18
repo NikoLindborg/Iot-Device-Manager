@@ -13,17 +13,7 @@ const DeviceSchema = new Schema<IDevice>({
       trustedState: Number,
     },
   ],
-  sensors: [
-    {
-      sensorType: String,
-      sensorData: [
-        {
-          sensorValue: String,
-          timestamp: String,
-        },
-      ],
-    },
-  ],
+  sensors: [String],
 })
 
 export const Device = model<IDevice>('Device', DeviceSchema)

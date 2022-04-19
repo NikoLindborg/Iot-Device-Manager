@@ -19,5 +19,5 @@ steps:
     cd back-end
     npm install
     npx tsc
-    npm start
+    node dist/app.js
   displayName: 'npm install and build'

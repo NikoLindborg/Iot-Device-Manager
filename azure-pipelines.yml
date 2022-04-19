@@ -18,5 +18,6 @@ steps:
 - script: |
     cd back-end
     npm install
-    npm run start-production
+    npx tsc
+    npm start
   displayName: 'npm install and build'

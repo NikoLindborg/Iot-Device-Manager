@@ -1,3 +1,4 @@
+import { ISensorData } from './../types/sensorDataType';
 import {IChannel} from './../types/channelType'
 import {IDevice} from '../types/deviceType'
 import {useState, useEffect} from 'react'

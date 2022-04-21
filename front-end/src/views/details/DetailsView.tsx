@@ -20,17 +20,15 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
   const [isMobile, setIsMobile] = useState(() => {
     return window.innerWidth > 1000 ? false : true
   })
-  const {fetchDevice, fetchDeviceData} = useDevices()
+  const {fetchDevice} = useDevices()
   const [open, setOpen] = useState(false)
   const [device, setDevice] = useState<IDevice>()
-  const [deviceData, setDeviceData] = useState<ISensorData>()
-  // const [trustedState, setTrustedState] = useState('')
   const [statusIcon, setStatusIcon] = useState('')
+  const [selectedData, setSelectedData] = useState('temperatur')
 
   const handleResize = () => {
     window.innerWidth > 1000 ? setIsMobile(false) : setIsMobile(true)
   }
-
   useEffect(() => {
     window.addEventListener('resize', handleResize)
     const fetch = async () => {
@@ -38,9 +36,6 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
         if (id) {
           const fetchedDevice = await fetchDevice(id)
           setDevice(fetchedDevice)
-          const fetchedDeviceData = await fetchDeviceData(id)
-          setDeviceData(fetchedDeviceData)
-          console.log('detaisview', deviceData)
         }
       } catch (error) {
         console.log(error)
@@ -72,6 +67,10 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
     setOpen(!open)
   }
 
+  const setSelectedGraphData = (dataLabel: string) => {
+    setSelectedData(dataLabel)
+  }
+
   return (
     <div className="details-view-container">
       <div>
@@ -98,7 +97,8 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
           <div className="details-view-graph-container">
             <DataGraph
               dataGraphItems={{
-                deviceData: deviceData,
+                selectedData: selectedData,
+                id: id,
               }}
             ></DataGraph>
           </div>
@@ -106,13 +106,14 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
             <h1>Sort by</h1>
           </div>
           <div className="details-view-component-container">
-            {device?.sensors ? (
-              device.sensors.map((sensor, i) => (
+            {device?.channels ? (
+              device.channels.map((channel, i) => (
                 <DetailComponent
                   key={i}
                   componentItems={{
-                    label: sensor,
+                    label: channel,
                   }}
+                  clickHandler={setSelectedGraphData}
                 />
               ))
             ) : (
@@ -124,5 +125,4 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
     </div>
   )
 }
-
 export default DetailsView

@@ -11,6 +11,7 @@ import {
 } from 'chart.js'
 import {Line} from 'react-chartjs-2'
 import {ISensorData} from '../../types/sensorDataType'
+import {useDevices} from '../../hooks/ApiHooks'
 
 ChartJS.register(
   CategoryScale,
@@ -24,11 +25,29 @@ ChartJS.register(
 
 interface DataGraphProps {
   dataGraphItems: {
-    deviceData?: ISensorData
+    selectedData?: string
+    id?: string
   }
 }
 
 const DataGraph: React.FC<DataGraphProps> = ({dataGraphItems}) => {
+  const {fetchDeviceData} = useDevices()
+  const [deviceData, setDeviceData] = useState<ISensorData[]>([])
+
+  useEffect(() => {
+    const fetch = async () => {
+      try {
+        if (dataGraphItems.id) {
+          const fetchedDeviceData = await fetchDeviceData(dataGraphItems.id)
+          setDeviceData(fetchedDeviceData)
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    fetch()
+  }, [])
+
   const options = {
     responsive: true,
     interaction: {
@@ -39,7 +58,7 @@ const DataGraph: React.FC<DataGraphProps> = ({dataGraphItems}) => {
     plugins: {
       title: {
         display: true,
-        text: 'test',
+        text: 'Data Graph',
       },
     },
     scales: {
@@ -59,30 +78,55 @@ const DataGraph: React.FC<DataGraphProps> = ({dataGraphItems}) => {
     },
   }
 
-  const labels = ['ha', 'haa']
-
-  if (dataGraphItems) {
-    if (dataGraphItems.deviceData) {
-      console.log('haha', dataGraphItems.deviceData.sensorType)
+  const getGraphData = (sensorName?: String) => {
+    if (deviceData) {
+      const graphData = deviceData.map((sensor) => {
+        if (sensor.sensorType == sensorName) {
+          console.log('iffiss', sensor.sensorValue)
+          return sensor.sensorValue
+        }
+      })
+      console.log(graphData)
+      return graphData
     } else {
-      console.log('hahaa')
+      console.log('get graph data failed')
     }
   }
 
-  const graphData = ['21', '22']
+  const getGraphDataLabels = (sensorName?: String) => {
+    if (deviceData) {
+      const graphDataLabels = deviceData.map((sensor) => {
+        if (sensor.sensorType == sensorName) {
+          return new Date(Number(sensor.timestamp) * 1000).toLocaleString(
+            'fi-FI'
+          )
+        }
+      })
+      console.log('grhlabels', graphDataLabels)
+      return graphDataLabels
+    } else {
+      console.log('get graph data labels failed')
+    }
+  }
+
+  const labels = getGraphDataLabels(dataGraphItems.selectedData)
 
   const data = {
     labels,
     datasets: [
       {
-        label: 'GRAPH',
-        data: graphData,
+        label: dataGraphItems.selectedData,
+        data: getGraphData(dataGraphItems.selectedData),
         borderColor: 'rgb(255, 99, 132)',
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         yAxisID: 'y',
       },
     ],
   }
+
+  useEffect(() => {
+    getGraphDataLabels()
+  }, [data])
 
   return <Line options={options} data={data} />
 }

@@ -82,7 +82,6 @@ const DataGraph: React.FC<DataGraphProps> = ({dataGraphItems}) => {
     if (deviceData) {
       const graphData = deviceData.map((sensor) => {
         if (sensor.sensorType == sensorName) {
-          console.log('iffiss', sensor.sensorValue)
           return sensor.sensorValue
         }
       })
@@ -102,7 +101,6 @@ const DataGraph: React.FC<DataGraphProps> = ({dataGraphItems}) => {
           )
         }
       })
-      console.log('grhlabels', graphDataLabels)
       return graphDataLabels
     } else {
       console.log('get graph data labels failed')
@@ -123,10 +121,6 @@ const DataGraph: React.FC<DataGraphProps> = ({dataGraphItems}) => {
       },
     ],
   }
-
-  useEffect(() => {
-    getGraphDataLabels()
-  }, [data])
 
   return <Line options={options} data={data} />
 }

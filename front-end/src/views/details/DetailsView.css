@@ -43,8 +43,8 @@
 }
 
 .details-view-graph-container{
-  margin: 1rem;
-  padding: 1rem;
+  margin: 0;
+  padding: 1.5rem;
   width: 100%;
   height: auto;
   border-radius: 1.25rem;
@@ -76,5 +76,8 @@
   .details-view-content-container {
       left: 14rem;
       background: linear-gradient(0deg, rgba(30,35,46,1) 0%, rgba(47,62,71,1) 100%);
+  }
+  .details-view-graph-container {
+    width: 60%;
   }
 }

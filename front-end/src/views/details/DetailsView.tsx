@@ -10,7 +10,6 @@ import StatusRedIcon from '../../assets/icons/status_red.svg'
 import StatusGreenIcon from '../../assets/icons/status_green.svg'
 import StatusYellowIcon from '../../assets/icons/status_yellow.svg'
 import DataGraph from '../../components/DataGraph/DataGraph'
-import {ISensorData} from '../../types/sensorDataType'
 
 interface DetailsViewProps {
   id?: string
@@ -24,7 +23,7 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
   const [open, setOpen] = useState(false)
   const [device, setDevice] = useState<IDevice>()
   const [statusIcon, setStatusIcon] = useState('')
-  const [selectedData, setSelectedData] = useState('temperatur')
+  const [selectedData, setSelectedData] = useState('')
 
   const handleResize = () => {
     window.innerWidth > 1000 ? setIsMobile(false) : setIsMobile(true)
@@ -36,6 +35,9 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
         if (id) {
           const fetchedDevice = await fetchDevice(id)
           setDevice(fetchedDevice)
+          if (fetchedDevice.channels) {
+            setSelectedData(fetchedDevice.channels[0])
+          }
         }
       } catch (error) {
         console.log(error)
@@ -48,15 +50,12 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
     if (device) {
       if (device.trustedState) {
         if (device.trustedState == 0) {
-          // setTrustedState('Online')
           setStatusIcon(StatusGreenIcon)
         }
         if (device.trustedState == 1) {
-          // setTrustedState('Offline')
           setStatusIcon(StatusRedIcon)
         }
         if (device.trustedState == 2) {
-          // setTrustedState('Untrusted')
           setStatusIcon(StatusYellowIcon)
         }
       }

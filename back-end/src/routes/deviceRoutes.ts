@@ -10,6 +10,14 @@ import {
 
 export const router = express.Router()
 
-router.route('/').get(getDevices).post(setDevice)
-router.route('/:id').delete(deleteDevice).put(updateDevice).get(getDevice)
-router.route('/sensordata/:id').get(getDeviceSensorData)
+router.route('/')
+.get(getDevices)
+.post(setDevice)
+
+router.route('/:id')
+.delete(deleteDevice)
+.put(updateDevice)
+.get(getDevice)
+
+router.route('/sensordata/:id')
+.get(getDeviceSensorData)

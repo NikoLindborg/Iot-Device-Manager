@@ -1,4 +1,4 @@
-import { DeviceNotification } from './../schemas/DeviceNotification';
+import {DeviceNotification} from './../schemas/DeviceNotification';
 import {Device} from '../schemas/Device'
 import {SubscribedChannel} from '../schemas/SubscribedChannel'
 import {ISensorData} from '../types/sensorDataType'

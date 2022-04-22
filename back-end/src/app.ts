@@ -1,5 +1,6 @@
 import express from 'express'
 import 'dotenv/config'
+import cors from 'cors'
 const app = express()
 const port = 3001
 import connectDB from './config/db'
@@ -13,7 +14,6 @@ connectDB()
 
 console.log('The WebSocket server is running on port 8080')
 const mqtt = mqttClient()
-var cors = require('cors')
 
 app.use(cors())
 app.use('/api/devices', deviceRoutes)

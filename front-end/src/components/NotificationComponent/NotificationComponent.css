@@ -4,6 +4,7 @@
   border-bottom: 0.063px solid #6C6C6C;
   display: flex;
   margin-bottom: 1rem;
+  justify-content: space-around;
 }
 
 .bold {

@@ -13,7 +13,9 @@ connectDB()
 
 console.log('The WebSocket server is running on port 8080')
 const mqtt = mqttClient()
+var cors = require('cors')
 
+app.use(cors())
 app.use('/api/devices', deviceRoutes)
 app.use('/api/channels', channelRoutes)
 app.use('/api/notifications', deviceNotificationRoutes)

@@ -4,9 +4,13 @@ import './NotificationComponent.css'
 
 interface NotificationProps {
   notification: INotification
+  deleteNotification: (id: string) => Promise<void>
 }
 
-const NotificationComponent: React.FC<NotificationProps> = ({notification}) => {
+const NotificationComponent: React.FC<NotificationProps> = ({
+  notification,
+  deleteNotification,
+}) => {
   const epoch = parseFloat(notification.timestamp)
   const date = new Date(epoch * 1000).toLocaleDateString()
   const time = new Date(epoch * 1000).toLocaleTimeString()
@@ -29,6 +33,12 @@ const NotificationComponent: React.FC<NotificationProps> = ({notification}) => {
           {`${date} - ${time}`}
         </div>
       </div>
+      <button
+        className="delete-single-notification"
+        onClick={() => deleteNotification(notification._id)}
+      >
+        X
+      </button>
     </div>
   )
 }

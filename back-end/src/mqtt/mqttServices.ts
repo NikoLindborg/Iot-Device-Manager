@@ -13,7 +13,6 @@ const announcementService = (
   wss: any
 ) => {
   Device.find({_id: message._id}, (err, docs) => {
-    console.log('error', err, docs)
     if (docs.length == 0) {
       Device.create(
         {

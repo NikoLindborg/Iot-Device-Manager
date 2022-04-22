@@ -1,0 +1,23 @@
+.notification-component {
+  text-align: left;
+  padding-bottom: 1rem;
+  border-bottom: 0.063px solid #6C6C6C;
+  display: flex;
+  margin-bottom: 1rem;
+  justify-content: space-around;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.description {
+  font-size: 0.8rem;
+}
+
+.status-dot {
+  height: 0.8rem;
+  width: 0.8rem;
+  margin: 0.4rem 0.4rem 0.4rem 0;
+  border-radius: 100%;
+}

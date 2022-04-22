@@ -1,3 +1,7 @@
+* {
+  font-family: 'IBM Plex Mono', monospace;
+}
+
 .dropdown-wrapper {
   width: -webkit-fill-available;
   margin: 0.75rem;

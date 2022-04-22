@@ -97,7 +97,7 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
               <DetailComponent
                 key={device._id as string}
                 componentItems={{
-                  label: sensor.sensorType,
+                  label: sensor,
                 }}
               />
             ))

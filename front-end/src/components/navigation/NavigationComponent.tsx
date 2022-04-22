@@ -3,7 +3,13 @@ import NokiaBellLabsLogo from '../../assets/NokiaBellLabsLogo'
 import './NavigationComponent.css'
 import {Icon} from '@iconify/react'
 
-const NavigationComponent: React.FC = () => {
+type ChildProps = {
+  toggleNotificationCenter?: () => void
+}
+
+const NavigationComponent: React.FC<ChildProps> = ({
+  toggleNotificationCenter,
+}) => {
   return (
     <div className="nav-bar">
       <NokiaBellLabsLogo />
@@ -14,9 +20,8 @@ const NavigationComponent: React.FC = () => {
             icon="ic:outline-notifications"
             color="white"
             width="22"
+            onClick={toggleNotificationCenter}
           />
-          <Icon className="icon" icon="ci:settings" color="white" width="22" />
-          <Icon className="icon" icon="gg:profile" color="white" width="22" />
         </div>
       </div>
     </div>

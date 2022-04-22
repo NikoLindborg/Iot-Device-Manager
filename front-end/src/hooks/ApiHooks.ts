@@ -24,9 +24,8 @@ export const useDevices = () => {
     }
 
     connection.onmessage = (device) => {
-      if (device.data instanceof Blob) {
-        console.log('perse')
-      }
+      /* Blob error issue number #65
+      if (device.data instanceof Blob) {}*/
       console.log(device.data)
       const newDevice = JSON.parse(device.data as unknown as string) as IDevice
       console.log('asda', newDevice)

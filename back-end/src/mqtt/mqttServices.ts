@@ -13,18 +13,46 @@ const announcementService = (
   wss: any
 ) => {
   Device.find({_id: message._id}, (err, docs) => {
+    console.log('saatu message', message)
+    if(message.disconnect) {
+      DeviceNotification.create(
+        {
+          deviceId: message._id,
+          deviceName: message.deviceName,
+          deviceChannels: message.channels,
+          timestamp: message.timestamp,
+          title: `Device ${message.deviceName} disconnected`,
+          status: 2,
+        }
+      )
+      Device.findOneAndUpdate({_id: message._id}, {trustedState: 3}, {new: true})
+      return
+    }
+    if (docs.length > 0) {
+      DeviceNotification.create(
+        {
+          deviceId: message._id,
+          deviceName: message.deviceName,
+          deviceChannels: message.channels,
+          timestamp: message.timestamp,
+          title: `Device ${message.deviceName} connected`,
+          status: 3,
+        }
+      )
+      Device.findOneAndUpdate({_id: message._id}, {trustedState: 3}, {new: true})
+    }
     if (docs.length == 0) {
       Device.create(
         {
           name: message.deviceName,
           _id: message._id,
-          trustedState: 1,
+          trustedState: 2,
           channels: message.channels,
           history: [
             {
               name: message.deviceName,
               timestamp: message.timestamp,
-              trustedState: 1,
+              trustedState: 2,
             },
           ],
         },
@@ -44,7 +72,8 @@ const announcementService = (
           deviceName: message.deviceName,
           deviceChannels: message.channels,
           timestamp: message.timestamp,
-          title: `Device ${message.deviceName} connected`
+          title: `Device ${message.deviceName} connected`,
+          status: 3
         }
       )
     }

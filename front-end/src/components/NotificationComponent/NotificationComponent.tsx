@@ -17,7 +17,13 @@ const NotificationComponent: React.FC<NotificationProps> = ({
 
   return (
     <div className="notification-component">
-      <div className="status-dot" style={{background: '#49C364'}}></div>
+      <div
+        className="status-dot"
+        style={
+          // eslint-disable-next-line prettier/prettier
+          notification.status == 1 ? {background: '#49C364'} : notification.status == 2 ? {background: '#FA4C5C'} : {background: '#FFCD05'}
+        }
+      ></div>
       <div className="notification-text-container">
         <div className="notification-component-header bold">
           {notification.title}

@@ -1,6 +1,5 @@
-import React, {useEffect, useState} from 'react'
+import React from 'react'
 import {useNotifications} from '../../hooks/ApiHooks'
-import {INotification} from '../../types/notificationType'
 import NotificationComponent from '../NotificationComponent/NotificationComponent'
 import './NotificationCenterComponent.css'
 
@@ -8,13 +7,13 @@ const NotificationCenterComponent: React.FC = () => {
   // eslint-disable-next-line operator-linebreak
   const {notifications, deleteNotifications, deleteSingleNotification} =
     useNotifications()
-  const [notificationList, setNotificationList] = useState<INotification[]>()
+  // const [notificationList, setNotificationList] = useState<INotification[]>()
 
-  useEffect(() => {
+  /* useEffect(() => {
     setNotificationList(notifications)
-  }, [notifications])
+  }, [notifications])*/
 
-  const mappedNotifications = notificationList?.map((notification) => {
+  const mappedNotifications = notifications?.map((notification) => {
     return (
       <NotificationComponent
         notification={notification}

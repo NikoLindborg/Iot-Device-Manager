@@ -80,7 +80,7 @@ export const useChannels = () => {
 }
 
 export const useNotifications = () => {
-  const [notifications, setNotifications] = useState<INotification[]>()
+  const [notifications, setNotifications] = useState<INotification[]>([])
 
   useEffect(() => {
     fetchNotifications()

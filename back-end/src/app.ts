@@ -5,7 +5,6 @@ const port = 3001
 import connectDB from './config/db'
 import {router as deviceRoutes} from './routes/deviceRoutes'
 import {router as channelRoutes} from './routes/channelRoutes'
-import WebSocketClient from './websocket/websocket'
 import mqttClient from './mqtt/mqtt'
 
 connectDB()

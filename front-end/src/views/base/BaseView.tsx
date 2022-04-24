@@ -8,6 +8,7 @@ import './BaseView.css'
 import {useChannels, useDevices} from '../../hooks/ApiHooks'
 import DropDown from '../../components/DropDownComponent/DropDown'
 import DeviceList from '../../components/DeviceList/DeviceList'
+import NotificationCenterComponent from '../../components/NotificationCenterComponent/NotificationCenterComponent'
 
 const BaseView: React.FC = () => {
   const [isMobile, setIsMobile] = useState(() => {
@@ -16,6 +17,7 @@ const BaseView: React.FC = () => {
   const {devices} = useDevices()
   const {channels} = useChannels()
   const [open, setOpen] = useState(false)
+  const [openNotificationCenter, setOpenNotificationCenter] = useState(false)
 
   //  Variables needed for Channel DropDown
   const initialChannel = 'All Channels'
@@ -38,6 +40,10 @@ const BaseView: React.FC = () => {
     setOpen(!open)
   }
 
+  const toggleNotificationCenter = () => {
+    setOpenNotificationCenter(!openNotificationCenter)
+  }
+
   return (
     <div className="base-view-container">
       <div>
@@ -51,10 +57,13 @@ const BaseView: React.FC = () => {
           </>
         ) : (
           <>
-            <NavigationComponent />
+            <NavigationComponent
+              toggleNotificationCenter={toggleNotificationCenter}
+            />
             <MenuComponent devices={devices} />
           </>
         )}
+        {openNotificationCenter && <NotificationCenterComponent />}
       </div>
       <div className="base-view-content-container">
         {/* Content comes here */}

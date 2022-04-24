@@ -18,7 +18,8 @@ steps:
 - script: |
     cd back-end
     npm install
-    npm start
+    npx tsc
+    node dist/app.js
     env:
       MONGODB_URL: $(MONGODB_URL)
   displayName: 'npm install and build'

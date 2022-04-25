@@ -1,4 +1,4 @@
-import {DeviceNotification} from './../schemas/DeviceNotification';
+import {DeviceNotification} from './../schemas/DeviceNotification'
 import {Device} from '../schemas/Device'
 import {SubscribedChannel} from '../schemas/SubscribedChannel'
 import {ISensorData} from '../types/sensorDataType'
@@ -12,6 +12,7 @@ const announcementService = (
   client: any,
   wss: any
 ) => {
+  try {
     Device.find({_id: message._id}, (err, docs) => {
       if (docs.length == 0) {
         Device.create(
@@ -30,7 +31,6 @@ const announcementService = (
           },
           (err, docs) => {
             wss.clients.forEach((client) => {
-
               if (client.readyState === WebSocket.OPEN) {
                 console.log('SENT MESSAGE')
                 client.send(JSON.stringify(docs))
@@ -38,37 +38,16 @@ const announcementService = (
             })
           }
         )
-        DeviceNotification.create(
-          {
-            deviceId: message._id,
-            deviceName: message.deviceName,
-            deviceChannels: message.channels,
-            timestamp: message.timestamp,
-            title: `Device ${message.deviceName} connected`
-          }
-        )
-      }
-    })
-    message.channels.forEach((channel) => {
-      if (!topics.includes(channel)) {
-        topics.push(channel)
-        client.subscribe([channel], () => {
-          console.log(`Subscribe to topic ${channel}`)
+        DeviceNotification.create({
+          deviceId: message._id,
+          deviceName: message.deviceName,
+          deviceChannels: message.channels,
+          timestamp: message.timestamp,
+          title: `Device ${message.deviceName} connected`,
         })
-
-        SubscribedChannel.findOneAndUpdate(
-          {name: channel},
-          {$push: {devices: message._id}},
-          (err, docs) => {
-            if (!docs) {
-              SubscribedChannel.create({
-                name: channel,
-                devices: message._id,
-            })
-          }
-        )
       }
     })
+
     message.channels.forEach((channel) => {
       if (!topics.includes(channel)) {
         topics.push(channel)

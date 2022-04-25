@@ -4,7 +4,7 @@ import {SubscribedChannel} from '../schemas/SubscribedChannel'
 import {ISensorData} from '../types/sensorDataType'
 import {ifAnnouncements} from './../types/announcementType'
 import WebSocket from 'ws'
-import { SensorData } from '../schemas/sensorData'
+import {SensorData} from '../schemas/sensorData'
 
 const announcementService = (
   message: ifAnnouncements,
@@ -12,66 +12,88 @@ const announcementService = (
   client: any,
   wss: any
 ) => {
-  Device.find({_id: message._id}, (err, docs) => {
-    if (docs.length == 0) {
-      Device.create(
-        {
-          name: message.deviceName,
-          _id: message._id,
-          trustedState: 1,
-          channels: message.channels,
-          history: [
-            {
-              name: message.deviceName,
-              timestamp: message.timestamp,
-              trustedState: 1,
-            },
-          ],
-        },
-        (err, docs) => {
-          wss.clients.forEach((client) => {
+    Device.find({_id: message._id}, (err, docs) => {
+      if (docs.length == 0) {
+        Device.create(
+          {
+            name: message.deviceName,
+            _id: message._id,
+            trustedState: 1,
+            channels: message.channels,
+            history: [
+              {
+                name: message.deviceName,
+                timestamp: message.timestamp,
+                trustedState: 1,
+              },
+            ],
+          },
+          (err, docs) => {
+            wss.clients.forEach((client) => {
 
-            if (client.readyState === WebSocket.OPEN) {
-              console.log('SENT MESSAGE')
-              client.send(JSON.stringify(docs))
-            }
-          })
-        }
-      )
-      DeviceNotification.create(
-        {
-          deviceId: message._id,
-          deviceName: message.deviceName,
-          deviceChannels: message.channels,
-          timestamp: message.timestamp,
-          title: `Device ${message.deviceName} connected`
-        }
-      )
-    }
-  })
-  message.channels.forEach((channel) => {
-    if (!topics.includes(channel)) {
-      topics.push(channel)
-      client.subscribe([channel], () => {
-        console.log(`Subscribe to topic ${channel}`)
-      })
-
-      SubscribedChannel.findOneAndUpdate(
-        {name: channel},
-        {$push: {devices: message._id}},
-        (err, docs) => {
-          if (!docs) {
-            SubscribedChannel.create({
-              name: channel,
-              devices: message._id,
+              if (client.readyState === WebSocket.OPEN) {
+                console.log('SENT MESSAGE')
+                client.send(JSON.stringify(docs))
+              }
             })
-          } else {
-            console.log(docs)
           }
-        }
-      )
-    }
-  })
+        )
+        DeviceNotification.create(
+          {
+            deviceId: message._id,
+            deviceName: message.deviceName,
+            deviceChannels: message.channels,
+            timestamp: message.timestamp,
+            title: `Device ${message.deviceName} connected`
+          }
+        )
+      }
+    })
+    message.channels.forEach((channel) => {
+      if (!topics.includes(channel)) {
+        topics.push(channel)
+        client.subscribe([channel], () => {
+          console.log(`Subscribe to topic ${channel}`)
+        })
+
+        SubscribedChannel.findOneAndUpdate(
+          {name: channel},
+          {$push: {devices: message._id}},
+          (err, docs) => {
+            if (!docs) {
+              SubscribedChannel.create({
+                name: channel,
+                devices: message._id,
+            })
+          }
+        )
+      }
+    })
+    message.channels.forEach((channel) => {
+      if (!topics.includes(channel)) {
+        topics.push(channel)
+        client.subscribe([channel], () => {
+          console.log(`Subscribe to topic ${channel}`)
+        })
+        SubscribedChannel.findOneAndUpdate(
+          {name: channel},
+          {$push: {devices: message._id}},
+          (err, docs) => {
+            if (!docs) {
+              SubscribedChannel.create({
+                name: channel,
+                devices: message._id,
+              })
+            } else {
+              console.log(docs)
+            }
+          }
+        )
+      }
+    })
+  } catch (error) {
+    console.log('error occurred trying to handle announcements ', error)
+  }
 }
 
 const sensorService = (message: ISensorData) => {

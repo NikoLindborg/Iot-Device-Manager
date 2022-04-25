@@ -12,12 +12,14 @@ pool:
 steps:
 - task: NodeTool@0
   inputs:
-    versionSpec: '10.x'
+    versionSpec: '14.x'
   displayName: 'Install Node.js'
 
 - script: |
     cd back-end
     npm install
     npx tsc
-    npm start
+    node dist/app.js
+    env:
+      MONGODB_URL: $(MONGODB_URL)
   displayName: 'npm install and build'

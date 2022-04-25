@@ -1,14 +1,5 @@
-//file = shutdown.service location= /etc/systemd/system
-//not working currently
-
-[Unit]
-Description=shutdown Service
-After=final.target
-
-[Service]
-Type=oneshot
-RemainAfterExit=true
-ExecStop=/usr/bin/python3 /home/pi/shutdownScript.py
-
-[Install]
-WantedBy=multi-user.target
+//file = iotmgrstop.sh location= /home/iot-device-manager/iotmgrstop.sh
+ 
+ pwd
+ which python3
+ python3 /home/pi/iot-device-manager/shutdownScript.py

@@ -14,7 +14,6 @@ const announcementService = (
 ) => {
   try{
   Device.find({_id: message._id}, (err, docs) => {
-    console.log('saatu message', message)
     if(message.disconnect) {
       DeviceNotification.create(
         {

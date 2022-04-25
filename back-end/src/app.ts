@@ -8,6 +8,7 @@ import {router as deviceRoutes} from './routes/deviceRoutes'
 import {router as channelRoutes} from './routes/channelRoutes'
 import {router as deviceNotificationRoutes} from './routes/deviceNotificationRoutes'
 import WebSocketClient from './websocket/websocket'
+
 import mqttClient from './mqtt/mqtt'
 
 connectDB()

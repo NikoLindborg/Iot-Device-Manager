@@ -5,4 +5,5 @@ export interface INotification {
   deviceChannels: string[]
   timestamp: string
   title: string
+  status: number
 }

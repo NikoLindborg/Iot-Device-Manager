@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React from 'react'
 import {INotification} from '../../types/notificationType'
 import './NotificationComponent.css'
@@ -17,10 +18,20 @@ const NotificationComponent: React.FC<NotificationProps> = ({
 
   return (
     <div className="notification-component">
-      <div className="status-dot" style={{background: '#49C364'}}></div>
+      <div
+        className="status-dot"
+        style={
+          // eslint-disable-next-line prettier/prettier
+          notification.status == 1 ? {background: '#49C364'} : notification.status == 2 ? {background: '#FA4C5C'} : {background: '#FFCD05'}
+        }
+      ></div>
       <div className="notification-text-container">
         <div className="notification-component-header bold">
-          {notification.title}
+          {notification.status == 1
+            ? `${notification.deviceName} is trusted`
+            : notification.status == 2
+            ? `${notification.deviceName} disconnected`
+            : `${notification.deviceName} connected`}
         </div>
         <div className="notification-component-name description">
           Name: {notification.deviceName}

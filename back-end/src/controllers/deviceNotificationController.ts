@@ -35,7 +35,7 @@ export const setDeviceNotification = async (newNotification: IDeviceNotification
 /** Delete a notification in MongoDB by given id */
 export const deleteAllNotifications = async (req, res) => {
     try {
-        const notification = await DeviceNotification.remove({})
+        const notification = await DeviceNotification.deleteMany({})
         res.status(200).json(notification)
     } catch (error) {
         console.log(error)

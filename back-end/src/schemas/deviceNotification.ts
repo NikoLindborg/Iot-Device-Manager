@@ -6,7 +6,7 @@ const DeviceNotificationSchema = new Schema<IDeviceNotification>({
   deviceName: String,
   deviceChannels: [String],
   timestamp: String,
-  title: String,
+  status: Number,
 })
 
 export const DeviceNotification = model<IDeviceNotification>('Device Notification', DeviceNotificationSchema)

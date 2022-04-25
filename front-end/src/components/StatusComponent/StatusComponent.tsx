@@ -29,7 +29,7 @@ const StatusComponent: React.FC<StatusComponentProps> = ({devices}) => {
           statusData.offlineDeviceAmount,
           statusData.untrustedDeviceAmount,
         ],
-        backgroundColor: ['#48C864', '#FFCD05', '#FA4C5C'],
+        backgroundColor: ['#48C864', '#FA4C5C', '#FFCD05'],
         borderWidth: 0,
         cutout: '70%',
       },

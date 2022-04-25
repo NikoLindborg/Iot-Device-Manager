@@ -3,4 +3,5 @@ export interface ifAnnouncements {
   _id: string
   channels: string[]
   timestamp: string
+  disconnect?: boolean
 }

@@ -3,6 +3,5 @@ export interface IDeviceNotification {
   deviceName: string
   deviceChannels: string[]
   timestamp: string
-  title: string
   status: number
 }

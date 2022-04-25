@@ -1,3 +1,4 @@
+/* eslint-disable indent */
 import React from 'react'
 import {INotification} from '../../types/notificationType'
 import './NotificationComponent.css'
@@ -26,7 +27,11 @@ const NotificationComponent: React.FC<NotificationProps> = ({
       ></div>
       <div className="notification-text-container">
         <div className="notification-component-header bold">
-          {notification.title}
+          {notification.status == 1
+            ? `${notification.deviceName} is trusted`
+            : notification.status == 2
+            ? `${notification.deviceName} disconnected`
+            : `${notification.deviceName} connected`}
         </div>
         <div className="notification-component-name description">
           Name: {notification.deviceName}

@@ -21,7 +21,6 @@ const announcementService = (
           deviceName: message.deviceName,
           deviceChannels: message.channels,
           timestamp: message.timestamp,
-          title: `Device ${message.deviceName} disconnected`,
           status: 2,
         }
       )
@@ -35,7 +34,6 @@ const announcementService = (
           deviceName: message.deviceName,
           deviceChannels: message.channels,
           timestamp: message.timestamp,
-          title: `Device ${message.deviceName} connected`,
           status: 3,
         }
       )
@@ -72,7 +70,6 @@ const announcementService = (
           deviceName: message.deviceName,
           deviceChannels: message.channels,
           timestamp: message.timestamp,
-          title: `Device ${message.deviceName} connected`,
           status: 3
         }
       )

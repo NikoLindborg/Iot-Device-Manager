@@ -8,8 +8,8 @@ Wants=network-online.target
 [Service]
 Type=idle
 User=pi
-ExecStart=/usr/bin/python3 /home/pi/iot-device-manager/announcementScript.py
-ExecStop=/usr/bin/python3 /home/pi/iot-device-manager/shutdownScript.py
+ExecStart=/bin/sh /home/pi/iot-device-manager/iotmgrstart.sh
+ExecStop=/bin/sh /home/pi/iot-device-manager/iotmgrstop.sh
 Restart=on-failure
 RestartSec=60
 RemainAfterExit=yes

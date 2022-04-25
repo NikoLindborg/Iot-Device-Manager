@@ -7,11 +7,6 @@ const NotificationCenterComponent: React.FC = () => {
   // eslint-disable-next-line operator-linebreak
   const {notifications, deleteNotifications, deleteSingleNotification} =
     useNotifications()
-  // const [notificationList, setNotificationList] = useState<INotification[]>()
-
-  /* useEffect(() => {
-    setNotificationList(notifications)
-  }, [notifications])*/
 
   const mappedNotifications = notifications?.map((notification) => {
     return (

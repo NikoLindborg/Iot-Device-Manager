@@ -33,7 +33,8 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-
+    env: # Or as an environment variable
+      MONGODB_URL: ${{ MONGODB_URL }}
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:

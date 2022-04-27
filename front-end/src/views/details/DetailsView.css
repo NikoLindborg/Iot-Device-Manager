@@ -1,18 +1,9 @@
-.details-view-container {
-  width: 100vw;
-  height: 100vh;
-  background-color: #1E232E;
-}
-
-.details-view-content-container {
-  position: absolute;
-  bottom: 1rem;
-  right: 1rem;
-  left: 1rem;
-  top: 4rem;
-  border-radius: 0.5rem;
-  padding: 1rem;
-  overflow-y: scroll
+.device-details-title {
+  font-size: 1.375rem;
+  font-weight: bold;
+  color: white;
+  text-align: left;
+  padding: 0.75rem;
 }
 
 .details-view-header{
@@ -30,7 +21,7 @@
   font-weight: bold;
 }
 .details-view-header img{
-  margin: 0.3rem;
+  margin: 0.3rem 0.3rem 0.3rem 0;
 }
 
 .details-view-body{
@@ -73,10 +64,6 @@
   align-items: center;
 }
 @media only screen and (min-width: 1000px) {
-  .details-view-content-container {
-      left: 14rem;
-      background: linear-gradient(0deg, rgba(30,35,46,1) 0%, rgba(47,62,71,1) 100%);
-  }
   .details-view-graph-container {
     width: 60%;
   }

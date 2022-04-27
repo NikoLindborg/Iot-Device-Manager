@@ -1,37 +1,32 @@
 import React, {useEffect, useState} from 'react'
-import MobileMenuComponent from '../../components/menu/mobile/MobileMenuComponent'
-import MobileNavigationComponent from '../../components/navigation/mobile/MobileNavigationComponent'
-import NavigationComponent from '../../components/navigation/NavigationComponent'
 import './DetailsView.css'
 import {useDevices} from '../../hooks/ApiHooks'
 import {IDevice} from '../../types/deviceType'
 import DetailComponent from '../../components/DetailComponent/DetailComponent'
+import StatusRedIcon from '../../assets/icons/status_red.svg'
+import StatusGreenIcon from '../../assets/icons/status_green.svg'
+import StatusYellowIcon from '../../assets/icons/status_yellow.svg'
+import DataGraph from '../../components/DataGraph/DataGraph'
 
 interface DetailsViewProps {
   id?: string
 }
 
 const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
-  const [isMobile, setIsMobile] = useState(() => {
-    return window.innerWidth > 1000 ? false : true
-  })
   const {fetchDevice} = useDevices()
-  const [open, setOpen] = useState(false)
   const [device, setDevice] = useState<IDevice>()
-  const [trustedState, setTrustedState] = useState('')
-
-  const handleResize = () => {
-    window.innerWidth > 1000 ? setIsMobile(false) : setIsMobile(true)
-  }
+  const [statusIcon, setStatusIcon] = useState('')
+  const [selectedData, setSelectedData] = useState('')
 
   useEffect(() => {
-    window.addEventListener('resize', handleResize)
-    console.log('asd')
     const fetch = async () => {
       try {
         if (id) {
           const fetchedDevice = await fetchDevice(id)
           setDevice(fetchedDevice)
+          if (fetchedDevice.channels) {
+            setSelectedData(fetchedDevice.channels[0])
+          }
         }
       } catch (error) {
         console.log(error)
@@ -44,61 +39,50 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
     if (device) {
       if (device.trustedState) {
         if (device.trustedState == 0) {
-          setTrustedState('Online')
+          setStatusIcon(StatusGreenIcon)
         }
         if (device.trustedState == 1) {
-          setTrustedState('Offline')
+          setStatusIcon(StatusRedIcon)
         }
         if (device.trustedState == 2) {
-          setTrustedState('Untrusted')
+          setStatusIcon(StatusYellowIcon)
         }
       }
     }
-  }, [device])
+  }, [device?.trustedState])
 
-  const toggleMenu = () => {
-    setOpen(!open)
+  const setSelectedGraphData = (dataLabel: string) => {
+    setSelectedData(dataLabel)
   }
 
   return (
-    <div className="details-view-container">
-      <div>
-        {isMobile ? (
-          <>
-            <MobileNavigationComponent toggleMenu={toggleMenu} />
-            {open && <MobileMenuComponent />}
-          </>
-        ) : (
-          <>
-            <NavigationComponent />
-            {/* Commented Menu out to remind to fix detail view not rendering the base view again */}
-            {/* <MenuComponent devices={devices} /> */}
-          </>
-        )}
+    <div>
+      <div className="device-details-title">Device details</div>
+      <div className="details-view-header">
+        <img className="details-view-status-img" src={statusIcon}></img>
+        <h1>{device?.name}</h1>
       </div>
-
-      <div className="details-view-content-container">
-        <div className="details-view-header">
-          <h1>{device?.name}</h1>
-          <p>{device?._id}</p>
+      <div className="details-view-body">
+        <div className="details-view-graph-container">
+          <DataGraph
+            dataGraphItems={{
+              selectedData: selectedData,
+              id: id,
+            }}
+          ></DataGraph>
         </div>
-        <div className="details-view-body">
-          {device?.trustedState ? (
-            <DetailComponent
-              componentItems={{
-                label: trustedState,
-              }}
-            />
-          ) : (
-            <></>
-          )}
-          {device?.sensors ? (
-            device.sensors.map((sensor) => (
+        <div className="details-view-component-header">
+          <h1>Sort by</h1>
+        </div>
+        <div className="details-view-component-container">
+          {device?.channels ? (
+            device.channels.map((channel, i) => (
               <DetailComponent
-                key={device._id as string}
+                key={i}
                 componentItems={{
-                  label: sensor,
+                  label: channel,
                 }}
+                clickHandler={setSelectedGraphData}
               />
             ))
           ) : (
@@ -109,5 +93,4 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
     </div>
   )
 }
-
 export default DetailsView

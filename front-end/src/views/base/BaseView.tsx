@@ -9,24 +9,17 @@ import {useChannels, useDevices} from '../../hooks/ApiHooks'
 import DropDown from '../../components/DropDownComponent/DropDown'
 import DeviceList from '../../components/DeviceList/DeviceList'
 import NotificationCenterComponent from '../../components/NotificationCenterComponent/NotificationCenterComponent'
+import {Route, Routes} from 'react-router-dom'
+import DeviceView from '../devices/DevicesView'
+import DetailsView from '../details/DetailsView'
 
 const BaseView: React.FC = () => {
   const [isMobile, setIsMobile] = useState(() => {
     return window.innerWidth > 1000 ? false : true
   })
   const {devices} = useDevices()
-  const {channels} = useChannels()
   const [open, setOpen] = useState(false)
   const [openNotificationCenter, setOpenNotificationCenter] = useState(false)
-
-  //  Variables needed for Channel DropDown
-  const initialChannel = 'All Channels'
-  const [selectedChannel, setSelectedChannel] = useState(initialChannel)
-
-  //  Variables needed for Device DropDown
-  const initialStatus = 'All Devices'
-  const [selectedStatus, setSelectedStatus] = useState(initialStatus)
-  const listOfStatus = ['Trusted', 'Offline', 'Untrusted']
 
   const handleResize = () => {
     window.innerWidth > 1000 ? setIsMobile(false) : setIsMobile(true)
@@ -66,27 +59,10 @@ const BaseView: React.FC = () => {
         {openNotificationCenter && <NotificationCenterComponent />}
       </div>
       <div className="base-view-content-container">
-        {/* Content comes here */}
-        <div className="device-list-title">Devices</div>
-        <div className="dropdown-base-container">
-          <DropDown
-            elements={listOfStatus}
-            selectedElement={selectedStatus}
-            setSelectedElement={setSelectedStatus}
-            initialElement={initialStatus}
-          />
-          <DropDown
-            elements={channels}
-            selectedElement={selectedChannel}
-            setSelectedElement={setSelectedChannel}
-            initialElement={initialChannel}
-          />
-        </div>
-        <DeviceList
-          devices={devices}
-          selectedChannel={selectedChannel}
-          selectedStatus={selectedStatus}
-        />
+        <Routes>
+          <Route path="/" element={<DeviceView />}></Route>
+          <Route path=":deviceId" element={<DetailsView />} />
+        </Routes>
       </div>
     </div>
   )

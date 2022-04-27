@@ -44,7 +44,7 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
         if (device.trustedState == 1) {
           setStatusIcon(StatusRedIcon)
         }
-        if (device.trustedState == 2) {
+        if (device.trustedState != 0 && device.trustedState != 1) {
           setStatusIcon(StatusYellowIcon)
         }
       }

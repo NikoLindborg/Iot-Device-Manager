@@ -3,6 +3,9 @@ import {Chart as ChartJS, ArcElement, Tooltip, Legend} from 'chart.js'
 import {Doughnut} from 'react-chartjs-2'
 import './StatusComponent.css'
 import {IDevice} from '../../types/deviceType'
+import StatusRedIcon from '../../assets/icons/status_red.svg'
+import StatusGreenIcon from '../../assets/icons/status_green.svg'
+import StatusYellowIcon from '../../assets/icons/status_yellow.svg'
 
 ChartJS.register(ArcElement, Tooltip, Legend)
 
@@ -14,11 +17,16 @@ const StatusComponent: React.FC<StatusComponentProps> = ({devices}) => {
   const calculateDeviceStatuses = (status: number) =>
     devices.filter((device) => device.trustedState === status).length
 
+  const calculateUntrustedDevices = () =>
+    devices.filter(
+      (device) => device.trustedState != 0 && device.trustedState != 1
+    ).length
+
   const statusData = {
     totalDeviceAmount: devices.length,
-    trustedDeviceAmount: calculateDeviceStatuses(1),
-    offlineDeviceAmount: calculateDeviceStatuses(2),
-    untrustedDeviceAmount: calculateDeviceStatuses(3),
+    trustedDeviceAmount: calculateDeviceStatuses(0),
+    offlineDeviceAmount: calculateDeviceStatuses(1),
+    untrustedDeviceAmount: calculateUntrustedDevices(),
   }
 
   const statusComponentData = {
@@ -48,10 +56,20 @@ const StatusComponent: React.FC<StatusComponentProps> = ({devices}) => {
           </div>
         </div>
       </div>
-      <p className="status-description-long">
-        {statusData.offlineDeviceAmount} offline and{' '}
-        {statusData.untrustedDeviceAmount} untrusted devices found
-      </p>
+      <div className="status-calculator-container">
+        <div className="status-calculator">
+          <img src={StatusGreenIcon} />
+          <p>{statusData.trustedDeviceAmount} trusted</p>
+        </div>
+        <div className="status-calculator">
+          <img src={StatusYellowIcon} />
+          <p>{statusData.untrustedDeviceAmount} untrusted</p>
+        </div>
+        <div className="status-calculator">
+          <img src={StatusRedIcon} />
+          <p>{statusData.offlineDeviceAmount} offline</p>
+        </div>
+      </div>
     </div>
   )
 }

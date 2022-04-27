@@ -4,6 +4,7 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
+  margin-top: 1.5rem;
 }
 
 .status-component {
@@ -29,7 +30,30 @@
   margin: 0;
 }
 
-.status-description-long {
-    color: white;
-    font-weight: bold;
+.status-calculator-container {
+  margin-top: 2rem;
+  display: flex;
+  flex-direction: column;
+}
+
+.status-calculator {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  margin: 1rem;
+}
+
+.status-calculator img {
+  width: 1rem;
+  margin-right: 1rem;
+}
+
+.status-calculator p {
+  color: white;
+}
+
+@media only screen and (max-width: 1000px) {
+  .status-calculator-container {
+    flex-direction: row;
+  }
 }

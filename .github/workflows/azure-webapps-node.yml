@@ -43,6 +43,7 @@ jobs:
 
     - name: 'Create env file'
       run: |
+        echo ${{ secrets.MONGODB_URL }}
         touch .env
         echo MONGODB_URL=${{ secrets.MONGODB_URL }} >> .env
         cat .env

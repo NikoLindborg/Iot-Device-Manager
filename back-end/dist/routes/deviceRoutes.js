@@ -9,4 +9,5 @@ const deviceController_1 = require("../controllers/deviceController");
 exports.router = express_1.default.Router();
 exports.router.route('/').get(deviceController_1.getDevices).post(deviceController_1.setDevice);
 exports.router.route('/:id').delete(deviceController_1.deleteDevice).put(deviceController_1.updateDevice).get(deviceController_1.getDevice);
+exports.router.route('/sensordata/:id').get(deviceController_1.getDeviceSensorData);
 //# sourceMappingURL=deviceRoutes.js.map

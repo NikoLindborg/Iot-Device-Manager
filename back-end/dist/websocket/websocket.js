@@ -18,7 +18,6 @@ const WebSocketClient = () => {
             console.log('Some Error occurred');
         };
     });
-    console.log('The WebSocket server is running on port 8080');
     return { wss };
 };
 exports.default = WebSocketClient;

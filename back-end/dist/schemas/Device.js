@@ -14,17 +14,7 @@ const deviceSchema = new mongoose_1.Schema({
             trustedState: Number,
         },
     ],
-    sensors: [
-        {
-            name: String,
-            sensorData: [
-                {
-                    sensorValue: {},
-                    timestamp: String,
-                },
-            ],
-        },
-    ],
+    sensors: [String],
 });
 exports.Device = (0, mongoose_1.model)('Device', deviceSchema);
-//# sourceMappingURL=Device.js.map
+//# sourceMappingURL=device.js.map

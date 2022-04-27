@@ -14,17 +14,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const mqtt_1 = __importDefault(require("mqtt"));
 const GlobalVariables_1 = require("../utils/GlobalVariables");
-const SubscribedChannel_1 = require("../schemas/SubscribedChannel");
+const subscribedChannel_1 = require("../schemas/subscribedChannel");
 const mqttServices_1 = require("./mqttServices");
 const websocket_1 = __importDefault(require("../websocket/websocket"));
 const mqttClient = () => {
     const { wss } = (0, websocket_1.default)();
     const topics = [GlobalVariables_1.originalTopic];
     const dbTopics = () => __awaiter(void 0, void 0, void 0, function* () {
-        const fetchedTopics = yield SubscribedChannel_1.SubscribedChannel.find({});
-        fetchedTopics.forEach((topic) => {
-            topics.push(topic.name);
-        });
+        try {
+            const fetchedTopics = yield subscribedChannel_1.SubscribedChannel.find({});
+            fetchedTopics.forEach((topic) => {
+                topics.push(topic.name);
+            });
+        }
+        catch (error) {
+            console.log('error occurred fetching topics', error);
+        }
     });
     const client = mqtt_1.default.connect(GlobalVariables_1.connectUrl, {
         clientId: GlobalVariables_1.clientId,
@@ -34,16 +39,21 @@ const mqttClient = () => {
         password: 'public',
         reconnectPeriod: 1000,
     });
-    client.on('connect', () => {
-        console.log('connected');
-        dbTopics().then(() => {
-            topics.forEach((topic) => {
-                client.subscribe(topic, () => {
-                    console.log(`Subscribed to topic ${topic}`);
+    try {
+        client.on('connect', () => {
+            console.log('connected');
+            dbTopics().then(() => {
+                topics.forEach((topic) => {
+                    client.subscribe(topic, () => {
+                        console.log(`Subscribed to topic ${topic}`);
+                    });
                 });
             });
         });
-    });
+    }
+    catch (error) {
+        console.log('error occurred trying to connect to mqtt', error);
+    }
     client.on('message', (topic, payload) => {
         if (topic == 'ANNOUNCEMENT') {
             try {

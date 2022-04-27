@@ -9,13 +9,14 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.deleteDevice = exports.updateDevice = exports.setDevice = exports.getDevice = exports.getDevices = void 0;
-const Device_1 = require("../schemas/Device");
+exports.deleteDevice = exports.updateDevice = exports.setDevice = exports.getDeviceSensorData = exports.getDevice = exports.getDevices = void 0;
+const device_1 = require("../schemas/device");
+const sensorData_1 = require("../schemas/sensorData");
 /** Return list of all the devices from MongoDB */
 const getDevices = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     res.set('Access-Control-Allow-Origin', '*');
     try {
-        const devices = yield Device_1.Device.find({});
+        const devices = yield device_1.Device.find({});
         res.status(200).json(devices);
     }
     catch (error) {
@@ -25,8 +26,9 @@ const getDevices = (req, res) => __awaiter(void 0, void 0, void 0, function* () 
 });
 exports.getDevices = getDevices;
 const getDevice = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.set('Access-Control-Allow-Origin', '*');
     try {
-        const device = yield Device_1.Device.findById(req.params.id);
+        const device = yield device_1.Device.findById(req.params.id);
         res.status(200).json(device);
     }
     catch (error) {
@@ -35,6 +37,18 @@ const getDevice = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     }
 });
 exports.getDevice = getDevice;
+const getDeviceSensorData = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.set('Access-Control-Allow-Origin', '*');
+    try {
+        const sensorData = yield sensorData_1.SensorData.find({ deviceId: req.params.id });
+        res.status(200).json(sensorData);
+    }
+    catch (error) {
+        res.status(404);
+        throw new Error('Data for device not found!');
+    }
+});
+exports.getDeviceSensorData = getDeviceSensorData;
 /** Create a new device to MongoDB */
 const setDevice = (newDevice, req, res) => __awaiter(void 0, void 0, void 0, function* () {
     if (!newDevice) {
@@ -42,7 +56,7 @@ const setDevice = (newDevice, req, res) => __awaiter(void 0, void 0, void 0, fun
         throw new Error('No device!');
     }
     try {
-        const device = yield Device_1.Device.create({
+        const device = yield device_1.Device.create({
             name: newDevice.name,
             trustedState: newDevice.trustedState,
             channels: newDevice.channels,
@@ -60,7 +74,7 @@ exports.setDevice = setDevice;
 /** Update a device in MongoDB by given id */
 const updateDevice = (updatedDevice, req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const device = yield Device_1.Device.findByIdAndUpdate(req.params.id, updatedDevice, {
+        const device = yield device_1.Device.findByIdAndUpdate(req.params.id, updatedDevice, {
             new: true,
         });
         res.status(200).json(device);
@@ -74,7 +88,7 @@ exports.updateDevice = updateDevice;
 /** Delete a device in MongoDB by given id */
 const deleteDevice = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const device = yield Device_1.Device.findByIdAndDelete(req.params.id);
+        const device = yield device_1.Device.findByIdAndDelete(req.params.id);
         res.status(200).json(device);
     }
     catch (error) {

@@ -1,4 +1,4 @@
-import {Device} from '../schemas/Device'
+import {Device} from '../schemas/device'
 import { SensorData } from '../schemas/sensorData'
 import {IDevice} from '../types/deviceType'
 import { ISensorData } from '../types/sensorDataType'

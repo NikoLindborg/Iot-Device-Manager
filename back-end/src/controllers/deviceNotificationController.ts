@@ -1,5 +1,5 @@
 import { IDeviceNotification } from '../types/deviceNotificationType';
-import { DeviceNotification } from '../schemas/DeviceNotification';
+import { DeviceNotification } from '../schemas/deviceNotification';
 
 /** Return list of all the notifications from MongoDB */
 export const getDeviceNotifications = async (req, res) => {

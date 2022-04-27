@@ -1,82 +1,31 @@
-import {DeviceNotification} from './../schemas/DeviceNotification'
-import {Device} from '../schemas/Device'
-import {SubscribedChannel} from '../schemas/SubscribedChannel'
+import {Device} from '../schemas/device'
 import {ISensorData} from '../types/sensorDataType'
 import {ifAnnouncements} from './../types/announcementType'
-import WebSocket from 'ws'
 import {SensorData} from '../schemas/sensorData'
+import startAttestation from '../a10/a10services'
+import { createNewMongoDevice, updateMongoDevice, updateSubscribedChannels } from '../mongo/mongoServices';
 
-const announcementService = (
+const announcementService = async (
   message: ifAnnouncements,
   topics: string[],
   client: any,
   wss: any
 ) => {
-  try{
-  Device.find({_id: message._id}, (err, docs) => {
-    if(message.disconnect) {
-      DeviceNotification.create(
-        {
-          deviceId: message._id,
-          deviceName: message.deviceName,
-          deviceChannels: message.channels,
-          timestamp: message.timestamp,
-          status: 2,
-        }
-      )
-      Device.findOneAndUpdate({_id: message._id}, {trustedState: 3}, {new: true})
-      return
-    }
-    if (docs.length > 0) {
-      DeviceNotification.create(
-        {
-          deviceId: message._id,
-          deviceName: message.deviceName,
-          deviceChannels: message.channels,
-          timestamp: message.timestamp,
-          status: 3,
-        }
-      )
-      Device.findOneAndUpdate({_id: message._id}, {trustedState: 3}, {new: true})
-    }
-    if (docs.length == 0) {
-      Device.create(
-        {
-          name: message.deviceName,
-          _id: message._id,
-          trustedState: 2,
-          channels: message.channels,
-          history: [
-            {
-              name: message.deviceName,
-              timestamp: message.timestamp,
-              trustedState: 2,
-            },
-          ],
-        },
-        (err, docs) => {
-          wss.clients.forEach((client) => {
-
-            if (client.readyState === WebSocket.OPEN) {
-              console.log('SENT MESSAGE')
-              client.send(JSON.stringify(docs))
-            }
-          })
-        }
-      )
-      DeviceNotification.create(
-        {
- 
-          deviceId: message._id,
-          deviceName: message.deviceName,
-          deviceChannels: message.channels,
-          timestamp: message.timestamp,
-          status: 3
-        }
-      )
-    }
-  })
- 
+  try {
+    const attestStatus = 0
+    //await startAttestation(message._id)
+    Device.find({_id: message._id}, (err, docs) => {
+      if (message.disconnect) {
+        updateMongoDevice(message, 2)
+        return
+      }
+      if (docs.length > 0) {
+        updateMongoDevice(message, attestStatus)
+      }
+      if (docs.length == 0) {
+        createNewMongoDevice(message, attestStatus, wss)
+      }
+    })
 
     message.channels.forEach((channel) => {
       if (!topics.includes(channel)) {
@@ -84,20 +33,7 @@ const announcementService = (
         client.subscribe([channel], () => {
           console.log(`Subscribe to topic ${channel}`)
         })
-        SubscribedChannel.findOneAndUpdate(
-          {name: channel},
-          {$push: {devices: message._id}},
-          (err, docs) => {
-            if (!docs) {
-              SubscribedChannel.create({
-                name: channel,
-                devices: message._id,
-              })
-            } else {
-              console.log(docs)
-            }
-          }
-        )
+        updateSubscribedChannels(message, channel)
       }
     })
   } catch (error) {

@@ -1,4 +1,4 @@
-import { SubscribedChannel } from "../schemas/SubscribedChannel"
+import { SubscribedChannel } from "../schemas/subscribedChannel"
 import { ISubscribedChannel } from "../types/subscribedChannelType"
 
 /** Return list of all the subscribed channels from MongoDB */

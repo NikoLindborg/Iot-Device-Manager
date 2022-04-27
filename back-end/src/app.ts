@@ -7,14 +7,13 @@ import connectDB from './config/db'
 import {router as deviceRoutes} from './routes/deviceRoutes'
 import {router as channelRoutes} from './routes/channelRoutes'
 import {router as deviceNotificationRoutes} from './routes/deviceNotificationRoutes'
-import WebSocketClient from './websocket/websocket'
 
 import mqttClient from './mqtt/mqtt'
 
 connectDB()
 
 console.log('The WebSocket server is running on port 8080')
-const mqtt = mqttClient()
+mqttClient()
 
 app.use(cors())
 app.use('/api/devices', deviceRoutes)

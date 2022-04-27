@@ -1,12 +1,8 @@
 import {ifAnnouncements} from '../types/announcementType'
 import mqtt from 'mqtt'
 import {connectUrl, clientId, originalTopic} from '../utils/GlobalVariables'
-import {Device} from '../schemas/Device'
-import {IDevice} from '../types/deviceType'
-import {SubscribedChannel} from '../schemas/SubscribedChannel'
-import {getDevices} from '../controllers/deviceController'
+import {SubscribedChannel} from '../schemas/subscribedChannel'
 import {ISensorData} from '../types/sensorDataType'
-import {updateChannel} from '../controllers/channelController'
 import { announcementService, sensorService } from './mqttServices'
 import WebSocketClient from '../websocket/websocket'
 

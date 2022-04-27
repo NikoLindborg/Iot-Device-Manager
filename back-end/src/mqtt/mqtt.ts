@@ -14,10 +14,14 @@ const mqttClient = () => {
   const {wss} = WebSocketClient()
   const topics = [originalTopic]
   const dbTopics = async () => {
-    const fetchedTopics = await SubscribedChannel.find({})
-    fetchedTopics.forEach((topic) => {
-      topics.push(topic.name)
-    })
+    try{
+      const fetchedTopics = await SubscribedChannel.find({})
+      fetchedTopics.forEach((topic) => {
+        topics.push(topic.name)
+      })
+    }catch (error) {
+      console.log('error occurred fetching topics', error)
+    }
   }
   const client = mqtt.connect(connectUrl, {
     clientId,
@@ -28,16 +32,21 @@ const mqttClient = () => {
     reconnectPeriod: 1000,
   })
 
-  client.on('connect', () => {
-    console.log('connected')
-    dbTopics().then(() => {
-      topics.forEach((topic) => {
-        client.subscribe(topic, () => {
-          console.log(`Subscribed to topic ${topic}`)
+  try {
+    client.on('connect', () => {
+      console.log('connected')
+      dbTopics().then(() => {
+        topics.forEach((topic) => {
+          client.subscribe(topic, () => {
+            console.log(`Subscribed to topic ${topic}`)
+          })
         })
       })
     })
-  })
+  } catch (error) {
+    console.log('error occurred trying to connect to mqtt', error)
+  }
+
 
   client.on('message', (topic, payload) => {
     if (topic == 'ANNOUNCEMENT') {

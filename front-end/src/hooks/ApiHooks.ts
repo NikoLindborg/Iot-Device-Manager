@@ -1,8 +1,14 @@
+import {INotification} from './../types/notificationType'
 import { ISensorData } from './../types/sensorDataType';
 import {IChannel} from './../types/channelType'
 import {IDevice} from '../types/deviceType'
 import {useState, useEffect} from 'react'
-import {wsLocalHostUrl, apiUrl, channelUrl} from '../globals/globals'
+import {
+  wsLocalHostUrl,
+  apiUrl,
+  channelUrl,
+  notificationUrl,
+} from '../globals/globals'
 
 export const useDevices = () => {
   const [devices, setDevices] = useState<IDevice[]>([])
@@ -19,7 +25,9 @@ export const useDevices = () => {
     }
 
     connection.onmessage = (device) => {
-      console.log(device)
+      /* Blob error issue number #65
+      if (device.data instanceof Blob) {}*/
+      console.log(device.data)
       const newDevice = JSON.parse(device.data as unknown as string) as IDevice
       console.log('asda', newDevice)
       setDevices([...devices, newDevice])
@@ -70,4 +78,34 @@ export const useChannels = () => {
   }
 
   return {channels}
+}
+
+export const useNotifications = () => {
+  const [notifications, setNotifications] = useState<INotification[]>([])
+
+  useEffect(() => {
+    fetchNotifications()
+  }, [])
+
+  const fetchNotifications = async () => {
+    const response = await fetch(notificationUrl)
+    const data = await response.json()
+    setNotifications(data)
+  }
+
+  const deleteNotifications = async () => {
+    const response = await fetch(notificationUrl, {method: 'DELETE'})
+    const data = await response.json()
+    if (data.acknowledged) {
+      fetchNotifications()
+    }
+  }
+
+  const deleteSingleNotification = async (id: string) => {
+    const response = await fetch(`${notificationUrl}${id}`, {method: 'DELETE'})
+    await response.json()
+    fetchNotifications()
+  }
+
+  return {notifications, deleteNotifications, deleteSingleNotification}
 }

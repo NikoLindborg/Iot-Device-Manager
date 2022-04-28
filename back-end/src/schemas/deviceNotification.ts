@@ -1,7 +1,7 @@
 import {Schema, model} from 'mongoose'
 import { IDeviceNotification } from '../types/deviceNotificationType'
 
-const DeviceNotificationSchema = new Schema<IDeviceNotification>({
+const deviceNotificationSchema = new Schema<IDeviceNotification>({
   deviceId: String,
   deviceName: String,
   deviceChannels: [String],
@@ -9,4 +9,4 @@ const DeviceNotificationSchema = new Schema<IDeviceNotification>({
   status: Number,
 })
 
-export const DeviceNotification = model<IDeviceNotification>('Device Notification', DeviceNotificationSchema)
+export const DeviceNotification = model<IDeviceNotification>('Device Notification', deviceNotificationSchema)

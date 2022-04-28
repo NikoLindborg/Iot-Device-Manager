@@ -10,12 +10,13 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.deleteChannel = exports.updateChannel = exports.setChannel = exports.getChannels = void 0;
-const SubscribedChannel_1 = require("../schemas/SubscribedChannel");
+const subscribedChannel_1 = require("../schemas/subscribedChannel");
 /** Return list of all the subscribed channels from MongoDB */
 const getChannels = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    res.set('Access-Control-Allow-Origin', '*');
     try {
-        const channels = yield SubscribedChannel_1.SubscribedChannel.find({});
-        res.status(200).JSON(channels);
+        const channels = yield subscribedChannel_1.SubscribedChannel.find({});
+        res.status(200).json(channels);
     }
     catch (error) {
         console.log(error);
@@ -30,11 +31,11 @@ const setChannel = (newChannel, req, res) => __awaiter(void 0, void 0, void 0, f
         throw new Error('No channel!');
     }
     try {
-        const device = yield SubscribedChannel_1.SubscribedChannel.create({
+        const device = yield subscribedChannel_1.SubscribedChannel.create({
             name: newChannel.name,
             devices: newChannel.devices
         });
-        res.status(200).JSON(device);
+        res.status(200).json(device);
     }
     catch (error) {
         console.log(error);
@@ -45,7 +46,7 @@ exports.setChannel = setChannel;
 /** Update a channel in MongoDB by given id */
 const updateChannel = (updatedChannel, req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const channel = yield SubscribedChannel_1.SubscribedChannel.findByIdAndUpdate(req.params.id, updatedChannel, {
+        const channel = yield subscribedChannel_1.SubscribedChannel.findByIdAndUpdate(req.params.id, updatedChannel, {
             new: true,
         });
         res.status(200).JSON(channel);
@@ -59,7 +60,7 @@ exports.updateChannel = updateChannel;
 /** Delete a channel in MongoDB by given id */
 const deleteChannel = (req, res) => __awaiter(void 0, void 0, void 0, function* () {
     try {
-        const channel = yield SubscribedChannel_1.SubscribedChannel.findByIdAndDelete(req.params.id);
+        const channel = yield subscribedChannel_1.SubscribedChannel.findByIdAndDelete(req.params.id);
         res.status(200).JSON(channel);
     }
     catch (error) {

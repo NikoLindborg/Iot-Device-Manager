@@ -1,59 +1,48 @@
 "use strict";
-var __importDefault = (this && this.__importDefault) || function (mod) {
-    return (mod && mod.__esModule) ? mod : { "default": mod };
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 exports.sensorService = exports.announcementService = void 0;
-const Device_1 = require("../schemas/Device");
-const SubscribedChannel_1 = require("../schemas/SubscribedChannel");
-const ws_1 = __importDefault(require("ws"));
+const device_1 = require("../schemas/device");
 const sensorData_1 = require("../schemas/sensorData");
-const announcementService = (message, topics, client, wss) => {
-    Device_1.Device.find({ _id: message._id }, (err, docs) => {
-        console.log('error', err, docs);
-        if (docs.length == 0) {
-            Device_1.Device.create({
-                name: message.deviceName,
-                _id: message._id,
-                trustedState: 1,
-                channels: message.channels,
-                history: [
-                    {
-                        name: message.deviceName,
-                        timestamp: message.timestamp,
-                        trustedState: 1,
-                    },
-                ],
-            }, (err, docs) => {
-                wss.clients.forEach((client) => {
-                    if (client.readyState === ws_1.default.OPEN) {
-                        console.log('SENT MESSAGE');
-                        client.send(JSON.stringify(docs));
-                    }
+const mongoServices_1 = require("../mongo/mongoServices");
+const announcementService = (message, topics, client, wss) => __awaiter(void 0, void 0, void 0, function* () {
+    try {
+        const attestStatus = 0;
+        //await startAttestation(message._id)
+        device_1.Device.find({ _id: message._id }, (err, docs) => {
+            if (message.disconnect) {
+                (0, mongoServices_1.updateMongoDevice)(message, 2);
+                return;
+            }
+            if (docs.length > 0) {
+                (0, mongoServices_1.updateMongoDevice)(message, attestStatus);
+            }
+            if (docs.length == 0) {
+                (0, mongoServices_1.createNewMongoDevice)(message, attestStatus, wss);
+            }
+        });
+        message.channels.forEach((channel) => {
+            if (!topics.includes(channel)) {
+                topics.push(channel);
+                client.subscribe([channel], () => {
+                    console.log(`Subscribe to topic ${channel}`);
                 });
-            });
-        }
-    });
-    message.channels.forEach((channel) => {
-        if (!topics.includes(channel)) {
-            topics.push(channel);
-            client.subscribe([channel], () => {
-                console.log(`Subscribe to topic ${channel}`);
-            });
-            SubscribedChannel_1.SubscribedChannel.findOneAndUpdate({ name: channel }, { $push: { devices: message._id } }, (err, docs) => {
-                if (!docs) {
-                    SubscribedChannel_1.SubscribedChannel.create({
-                        name: channel,
-                        devices: message._id,
-                    });
-                }
-                else {
-                    console.log(docs);
-                }
-            });
-        }
-    });
-};
+                (0, mongoServices_1.updateSubscribedChannels)(message, channel);
+            }
+        });
+    }
+    catch (error) {
+        console.log('error occurred trying to handle announcements ', error);
+    }
+});
 exports.announcementService = announcementService;
 const sensorService = (message) => {
     sensorData_1.SensorData.create({

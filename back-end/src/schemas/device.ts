@@ -1,7 +1,7 @@
 import {Schema, model} from 'mongoose'
 import {IDevice} from '../types/deviceType'
 
-const DeviceSchema = new Schema<IDevice>({
+const deviceSchema = new Schema<IDevice>({
   name: String,
   _id: String,
   trustedState: Number,
@@ -16,4 +16,4 @@ const DeviceSchema = new Schema<IDevice>({
   sensors: [String],
 })
 
-export const Device = model<IDevice>('Device', DeviceSchema)
+export const Device = model<IDevice>('Device', deviceSchema)

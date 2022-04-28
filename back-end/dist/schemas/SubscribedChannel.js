@@ -7,4 +7,4 @@ const subscribedChannelSchema = new mongoose_1.Schema({
     devices: [{}]
 });
 exports.SubscribedChannel = (0, mongoose_1.model)("Subscribed Channel", subscribedChannelSchema);
-//# sourceMappingURL=SubscribedChannel.js.map
+//# sourceMappingURL=subscribedChannel.js.map

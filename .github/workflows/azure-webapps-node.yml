@@ -33,7 +33,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v3
-
+    
     - name: Set up Node.js
       uses: actions/setup-node@v3
       with:
@@ -41,6 +41,13 @@ jobs:
         cache: 'npm'
         cache-dependency-path: back-end/package-lock.json
 
+    - name: 'Create env file'
+      run: |
+        echo ${{ secrets.MONGODB_URL }}
+        touch .env
+        echo MONGODB_URL=${{ secrets.MONGODB_URL }} >> .env
+        cat .env
+          
     - name: npm install, build, and test
       run: |
         cd back-end

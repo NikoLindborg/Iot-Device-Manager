@@ -40,7 +40,10 @@ const BaseView: React.FC = () => {
       <div>
         {isMobile ? (
           <>
-            <MobileNavigationComponent toggleMenu={toggleMenu} />
+            <MobileNavigationComponent
+              toggleMenu={toggleMenu}
+              unreadNotifications={true}
+            />
             {open && <MobileMenuComponent />}
             <div className="mobile-status-container">
               <StatusComponent devices={devices} />
@@ -50,6 +53,7 @@ const BaseView: React.FC = () => {
           <>
             <NavigationComponent
               toggleNotificationCenter={toggleNotificationCenter}
+              unreadNotifications={true}
             />
             <MenuComponent devices={devices} />
           </>

@@ -7,11 +7,24 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
-    padding: 1em;
+    padding: 0.8rem;
     background-color: #29334A;
 }
 
 .icon-container {
     display: flex;
     justify-content: end;
+}
+
+.icon {
+    position: relative;
+}
+
+.red-dot {
+    position: absolute;
+    right: 1rem;
+    width: 0.5rem;
+    height: 0.5rem;
+    border-radius: 50%;
+    background-color: #FA4C5C;
 }

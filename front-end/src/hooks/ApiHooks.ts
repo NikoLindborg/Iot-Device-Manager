@@ -50,7 +50,7 @@ export const useDevices = () => {
   const fetchDevice = async (id: string) => {
     try {
       const response = await doFetch(`${apiUrl}/${id}`)
-      return response
+      return await response
     } catch (error) {
       console.log('error occurred fetching', error)
     }
@@ -60,7 +60,7 @@ export const useDevices = () => {
     try {
       const entity = 'sensordata'
       const response = await doFetch(`${apiUrl}/${entity}/${id}`)
-      return response
+      return await response
     } catch (error) {
       console.log('error occurred fetching', error)
     }
@@ -121,8 +121,7 @@ export const useNotifications = () => {
   const deleteNotifications = async () => {
     try {
       const response = await doFetch(notificationUrl, {method: 'DELETE'})
-      const data = await response.json()
-      if (data.acknowledged) {
+      if (response.acknowledged) {
         fetchNotifications()
       }
     } catch (error) {

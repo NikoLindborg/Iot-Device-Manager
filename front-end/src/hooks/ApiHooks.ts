@@ -1,5 +1,4 @@
 import {INotification} from './../types/notificationType'
-import { ISensorData } from './../types/sensorDataType';
 import {IChannel} from './../types/channelType'
 import {IDevice} from '../types/deviceType'
 import {useState, useEffect} from 'react'
@@ -9,6 +8,8 @@ import {
   channelUrl,
   notificationUrl,
 } from '../globals/globals'
+import {doFetch} from '../utils/http'
+import {replaceElement} from '../utils/utilFunctions'
 
 export const useDevices = () => {
   const [devices, setDevices] = useState<IDevice[]>([])
@@ -29,8 +30,8 @@ export const useDevices = () => {
       if (device.data instanceof Blob) {}*/
       console.log(device.data)
       const newDevice = JSON.parse(device.data as unknown as string) as IDevice
-      console.log('asda', newDevice)
-      setDevices([...devices, newDevice])
+      const newDevices = replaceElement(newDevice, devices)
+      setDevices(newDevices)
     }
   }
   useEffect(() => {
@@ -38,25 +39,44 @@ export const useDevices = () => {
   }, [])
 
   const fetchDevices = async () => {
-    const response = await fetch(apiUrl)
-    const data = await response.json()
-    setDevices(data)
+    try {
+      const response = await doFetch(apiUrl)
+      setDevices(response)
+    } catch (error) {
+      console.log('error occurred fetching', error)
+    }
   }
 
   const fetchDevice = async (id: string) => {
-    const response = await fetch(`${apiUrl}/${id}`)
-    const data = await response.json()
-    console.log(data)
-    return data
+    try {
+      const response = await doFetch(`${apiUrl}/${id}`)
+      return response
+    } catch (error) {
+      console.log('error occurred fetching', error)
+    }
   }
 
   const fetchDeviceData = async (id: string) => {
-    const entity = 'sensordata'
-    const response = await fetch(`${apiUrl}/${entity}/${id}`)
-    return await response.json()
+    try {
+      const entity = 'sensordata'
+      const response = await doFetch(`${apiUrl}/${entity}/${id}`)
+      return response
+    } catch (error) {
+      console.log('error occurred fetching', error)
+    }
   }
 
-  return {devices, fetchDevice, fetchDeviceData}
+  const attestDevice = async (id: string) => {
+    try {
+      const response: IDevice = await doFetch(`${apiUrl}/attest/${id}`)
+      const newDevices = replaceElement(response, devices)
+      setDevices(newDevices)
+      return await response
+    } catch (error) {
+      console.log('error occurred fetching', error)
+    }
+  }
+  return {devices, fetchDevice, fetchDeviceData, attestDevice}
 }
 
 export const useChannels = () => {
@@ -67,16 +87,18 @@ export const useChannels = () => {
   }, [])
 
   const fetchChannels = async () => {
-    const response = await fetch(channelUrl)
-    const data = await response.json()
-    mapChannelNames(data)
+    try {
+      const response = await doFetch(channelUrl)
+      mapChannelNames(response)
+    } catch (error) {
+      console.log('error fetching', error)
+    }
   }
 
   const mapChannelNames = (data: IChannel[]) => {
     const channelNames = data.map((channel) => channel.name)
     setChannels(channelNames)
   }
-
   return {channels}
 }
 
@@ -88,23 +110,37 @@ export const useNotifications = () => {
   }, [])
 
   const fetchNotifications = async () => {
-    const response = await fetch(notificationUrl)
-    const data = await response.json()
-    setNotifications(data)
+    try {
+      const response = await doFetch(notificationUrl)
+      setNotifications(response)
+    } catch (error) {
+      console.log('error fetching', error)
+    }
   }
 
   const deleteNotifications = async () => {
-    const response = await fetch(notificationUrl, {method: 'DELETE'})
-    const data = await response.json()
-    if (data.acknowledged) {
-      fetchNotifications()
+    try {
+      const response = await doFetch(notificationUrl, {method: 'DELETE'})
+      const data = await response.json()
+      if (data.acknowledged) {
+        fetchNotifications()
+      }
+    } catch (error) {
+      console.log('error fetching', error)
     }
   }
 
   const deleteSingleNotification = async (id: string) => {
-    const response = await fetch(`${notificationUrl}${id}`, {method: 'DELETE'})
-    await response.json()
-    fetchNotifications()
+    try {
+      const response = await doFetch(`${notificationUrl}${id}`, {
+        method: 'DELETE',
+      })
+      if (response) {
+        fetchNotifications()
+      }
+    } catch (error) {
+      console.log('error fetching', error)
+    }
   }
 
   return {notifications, deleteNotifications, deleteSingleNotification}

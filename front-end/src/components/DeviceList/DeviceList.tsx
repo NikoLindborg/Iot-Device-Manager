@@ -87,7 +87,7 @@ const DeviceList: React.FC<ListProps> = ({
                   : device.trustedState == 1
                   ? StatusRedIcon
                   : StatusYellowIcon,
-              label: device.name,
+              label: device.name || '',
               info:
                 device.trustedState == 0
                   ? 'Device is trusted'

@@ -25,6 +25,7 @@ const BaseView: React.FC = () => {
 
   useEffect(() => {
     window.addEventListener('resize', handleResize)
+    console.log('ey yo')
   }, [])
 
   const toggleMenu = () => {
@@ -40,10 +41,7 @@ const BaseView: React.FC = () => {
       <div>
         {isMobile ? (
           <>
-            <MobileNavigationComponent
-              toggleMenu={toggleMenu}
-              unreadNotifications={true}
-            />
+            <MobileNavigationComponent toggleMenu={toggleMenu} />
             {open && <MobileMenuComponent />}
             <div className="mobile-status-container">
               <StatusComponent devices={devices} />
@@ -53,7 +51,6 @@ const BaseView: React.FC = () => {
           <>
             <NavigationComponent
               toggleNotificationCenter={toggleNotificationCenter}
-              unreadNotifications={true}
             />
             <MenuComponent devices={devices} />
           </>

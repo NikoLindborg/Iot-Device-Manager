@@ -5,13 +5,10 @@ import {Icon} from '@iconify/react'
 
 type ChildProps = {
   toggleMenu?: () => void
-  unreadNotifications: boolean
 }
 
-const MobileNavigationComponent: React.FC<ChildProps> = ({
-  toggleMenu,
-  unreadNotifications,
-}) => {
+const MobileNavigationComponent: React.FC<ChildProps> = ({toggleMenu}) => {
+  const unreadNotifications = true
   return (
     <div className="nav-bar">
       <NokiaBellLabsLogo />
@@ -22,7 +19,7 @@ const MobileNavigationComponent: React.FC<ChildProps> = ({
           color="white"
           width="22"
         />
-        {unreadNotifications && <div className="red-dot"></div>}
+        {unreadNotifications ? <div className="red-dot"></div> : <></>}
       </div>
     </div>
   )

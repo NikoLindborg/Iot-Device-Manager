@@ -1,17 +1,20 @@
-import React from 'react'
+import React, {useContext} from 'react'
 import NokiaBellLabsLogo from '../../assets/NokiaBellLabsLogo'
 import './NavigationComponent.css'
 import {Icon} from '@iconify/react'
+import {
+  INotifications,
+  NotificationContext,
+} from '../../contexts/NotificationContext'
 
 type ChildProps = {
   toggleNotificationCenter?: () => void
-  unreadNotifications: boolean
 }
 
 const NavigationComponent: React.FC<ChildProps> = ({
   toggleNotificationCenter,
-  unreadNotifications,
 }) => {
+  const {unreadNotification} = useContext(NotificationContext) as INotifications
   return (
     <div className="nav-bar">
       <NokiaBellLabsLogo />
@@ -23,7 +26,7 @@ const NavigationComponent: React.FC<ChildProps> = ({
           width="22"
           onClick={toggleNotificationCenter}
         />
-        {unreadNotifications && <div className="red-dot"></div>}
+        {unreadNotification ? <div className="red-dot"></div> : <></>}
       </div>
     </div>
   )

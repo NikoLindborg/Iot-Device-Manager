@@ -21,6 +21,7 @@
   padding: 1rem 0 1rem;
   font-size: 1.25rem;
   position: sticky;
+  z-index: 10;
   top:0;
   background-color: #1E232E;
 }
@@ -72,4 +73,29 @@
 
 .delete-single-notification:hover {
   cursor: pointer;
+}
+
+@media only screen and (max-width: 1000px) {
+  .notification-center {
+    width: 100vw;
+    height: 95%;
+    background: transparent;
+    top: 0;
+    right: 0;
+    border: none;
+    box-sizing: border-box;
+    box-shadow: none;
+    border-radius: 0;
+    color: white;
+    padding: 0;
+  }
+
+  .notification-header {
+    background-color: #29334A;
+    padding: 1rem;
+  }
+
+  .notification-footer {
+    background-color: #29334A;
+  }
 }

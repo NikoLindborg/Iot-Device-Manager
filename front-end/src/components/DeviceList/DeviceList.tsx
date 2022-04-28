@@ -1,8 +1,12 @@
+/* eslint-disable operator-linebreak */
+/* eslint-disable indent */
 import React, {useEffect, useState} from 'react'
 import {Link} from 'react-router-dom'
 import type {IDevice} from '../../types/deviceType'
 import DeviceListComponent from '../DeviceListComponent/DeviceListComponent'
 import StatusRedIcon from '../../assets/icons/status_red.svg'
+import StatusGreenIcon from '../../assets/icons/status_green.svg'
+import StatusYellowIcon from '../../assets/icons/status_yellow.svg'
 import './DeviceList.css'
 
 interface ListProps {
@@ -27,13 +31,13 @@ const DeviceList: React.FC<ListProps> = ({
       setStatusFilter(null)
     }
     if (selectedStatus == 'Trusted') {
-      setStatusFilter(1)
+      setStatusFilter(0)
     }
     if (selectedStatus == 'Offline') {
-      setStatusFilter(2)
+      setStatusFilter(1)
     }
     if (selectedStatus == 'Untrusted') {
-      setStatusFilter(3)
+      setStatusFilter(2)
     }
   }, [selectedStatus])
 
@@ -48,7 +52,14 @@ const DeviceList: React.FC<ListProps> = ({
   })
 
   const mappedDevicesByState = devices.map((device) => {
-    if (device.trustedState == statusFilter || !statusFilter) {
+    if (
+      device.trustedState != 0 &&
+      device.trustedState != 1 &&
+      statusFilter == 2
+    ) {
+      return device
+    }
+    if (device.trustedState == statusFilter || statusFilter == null) {
       return device
     }
   })
@@ -70,9 +81,19 @@ const DeviceList: React.FC<ListProps> = ({
             id={device._id as string}
             key={device._id as number}
             componentItems={{
-              icon: StatusRedIcon,
+              icon:
+                device.trustedState == 0
+                  ? StatusGreenIcon
+                  : device.trustedState == 1
+                  ? StatusRedIcon
+                  : StatusYellowIcon,
               label: device.name,
-              info: 'Device is Offline',
+              info:
+                device.trustedState == 0
+                  ? 'Device is trusted'
+                  : device.trustedState == 1
+                  ? 'Device is offline'
+                  : 'Device is untrusted',
             }}
             clickHandler={handleClick}
           />

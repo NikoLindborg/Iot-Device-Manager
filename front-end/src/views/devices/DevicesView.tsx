@@ -17,7 +17,7 @@ const DeviceView: React.FC = () => {
   const [selectedStatus, setSelectedStatus] = useState(initialStatus)
   const listOfStatus = ['Trusted', 'Offline', 'Untrusted']
   return (
-    <div>
+    <div className="device-list-container">
       <div className="device-list-title">Devices</div>
       <div className="dropdown-base-container">
         <DropDown

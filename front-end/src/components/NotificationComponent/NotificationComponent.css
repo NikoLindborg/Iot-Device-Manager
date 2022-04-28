@@ -4,7 +4,13 @@
   border-bottom: 0.063px solid #6C6C6C;
   display: flex;
   margin-bottom: 1rem;
-  justify-content: space-around;
+  align-items: center;
+  width: 100%;
+}
+
+.notification-text-container {
+  margin-left: 2rem;
+  width: 80%;
 }
 
 .bold {
@@ -16,8 +22,21 @@
 }
 
 .status-dot {
+  position: absolute;
+  left: 1rem;
   height: 0.8rem;
   width: 0.8rem;
-  margin: 0.4rem 0.4rem 0.4rem 0;
   border-radius: 100%;
+}
+
+.delete-single-notification {
+  position: absolute;
+  right: 1rem;
+}
+
+@media only screen and (max-width: 1000px) {
+  .notification-text-container {
+    margin-left: 4rem;
+    width: 70%;
+  }
 }

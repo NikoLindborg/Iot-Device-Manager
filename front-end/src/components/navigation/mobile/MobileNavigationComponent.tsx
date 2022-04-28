@@ -12,7 +12,12 @@ const MobileNavigationComponent: React.FC<ChildProps> = ({toggleMenu}) => {
     <div className="nav-bar">
       <NokiaBellLabsLogo />
       <div className="burger" onClick={toggleMenu}>
-        <Icon id="burger" icon="eva:menu-fill" color="white" width="28" />
+        <Icon
+          className="icon"
+          icon="ic:outline-notifications"
+          color="white"
+          width="22"
+        />
       </div>
     </div>
   )

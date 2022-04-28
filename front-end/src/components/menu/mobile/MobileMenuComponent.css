@@ -11,10 +11,3 @@
     background-position: center;
     z-index: 1001;
 }
-
-.mobile-icons {
-    display: flex;
-    justify-content: space-evenly;
-    width: 100%;
-    margin: clamp(1rem, 2vw, 3rem);
-}

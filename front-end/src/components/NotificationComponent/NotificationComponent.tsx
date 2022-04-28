@@ -1,4 +1,5 @@
 /* eslint-disable indent */
+import {Icon} from '@iconify/react'
 import React from 'react'
 import {INotification} from '../../types/notificationType'
 import './NotificationComponent.css'
@@ -44,12 +45,14 @@ const NotificationComponent: React.FC<NotificationProps> = ({
           {`${date} - ${time}`}
         </div>
       </div>
-      <button
+      <Icon
+        icon="bx:x-circle"
+        color="white"
+        width="18"
+        inline={true}
         className="delete-single-notification"
         onClick={() => deleteNotification(notification._id)}
-      >
-        X
-      </button>
+      />
     </div>
   )
 }

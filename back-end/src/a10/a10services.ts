@@ -125,14 +125,14 @@ const getResult = async (resultId): Promise<number> => {
 
 const startAttestation = async (eid: string) => {
   try {
-    sessionId = await openSession()
+    /*sessionId = await openSession()
     const attest = await runAttestAndVerify(sessionId, eid)
     const results = await getResult(attest)
     if (results) {
       await closeSession(sessionId)
       return results
-    }
-    return
+    }*/
+    return 0
   } catch (error) {
     console.log('something went wrong running the script', error)
   }

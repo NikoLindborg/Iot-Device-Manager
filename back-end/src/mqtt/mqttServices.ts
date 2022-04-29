@@ -12,8 +12,7 @@ const announcementService = async (
   wss: any
 ) => {
   try {
-    const attestStatus = 0
-    //await startAttestation(message._id)
+    const attestStatus = await startAttestation(message._id)
     Device.find({_id: message._id}, (err, docs) => {
       if (message.disconnect) {
         updateMongoDevice(message, 2)

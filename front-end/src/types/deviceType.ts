@@ -1,7 +1,7 @@
 import {IDeviceHistory} from './deviceHistoryType'
 
 export interface IDevice {
-  name: string
+  name?: string
   trustedState?: number
   channels?: string[]
   history?: IDeviceHistory[]

@@ -20,5 +20,13 @@ const cps = {
   },
 }
 const headers = {headers: {'Content-Type': 'application/json'}}
+const rul = [
+  'tpm2rules/PCRsAllUnassigned',
+  {
+    bank: 'sha256',
+  },
+]
 
-export {connectUrl, clientId, originalTopic, a10RestApi, policyId, policyId2, cps, headers}
+const credentialRule = ['tpm2rules/TPM2CredentialVerify', {}]
+
+export {connectUrl, clientId, originalTopic, a10RestApi, policyId, policyId2, cps, headers, rul, credentialRule}

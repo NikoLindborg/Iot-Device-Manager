@@ -4,6 +4,8 @@ import {
   policyId2,
   cps,
   headers,
+  rul,
+  credentialRule,
 } from '../utils/GlobalVariables'
 import axios from 'axios'
 
@@ -54,18 +56,24 @@ const closeSession = async (sid) => {
 const runAttestAndVerify = async (sid, eid) => {
   try {
     console.log('first eid', eid)
-    const pcReadAttest = await runAttest(sid, policyId, cps, eid)
+    const pcReadAttest = await runAttest(sid, policyId, cps, eid, rul)
     const cps2 = await getProtocolParameters(eid)
-    //const credentialCheckAttest = await runAttest(sid, policyId2, cps2)
+    const credentialCheckAttest = await runAttest(
+      sid,
+      policyId2,
+      cps2,
+      eid,
+      credentialRule
+    )
     console.log('PcRead', pcReadAttest)
-    //console.log('credentialCheckl', credentialCheckAttest)
-    return {pcReadAttest: pcReadAttest}
+    console.log('credentialCheckl', credentialCheckAttest)
+    return credentialCheckAttest
   } catch (error) {
     console.log('error occurred doing multiple attests', error)
   }
 }
 
-const runAttest = async (sid, policyId, claimPolicy, eid) => {
+const runAttest = async (sid, policyId, claimPolicy, eid, rul) => {
   try {
     console.log('second eid', eid)
     const body = JSON.stringify({
@@ -80,23 +88,17 @@ const runAttest = async (sid, policyId, claimPolicy, eid) => {
       cps: claimPolicy,
       sid: sid,
     })
-    //const results = await axios.post(`${url}/attest`, body, headers)
-    // const verify = await runVerify(results.data.claim, sid)
-    //console.log('succesfully ran attest', results.data)
-    //return verify
+    const results = await axios.post(`${url}/attest`, body, headers)
+    const verify = await runVerify(results.data.claim, sid, rul)
+    console.log('succesfully ran attest', results.data)
+    return verify
   } catch (error) {
     console.log('error attesting', error)
   }
 }
 
-const runVerify = async (cid, sid) => {
+const runVerify = async (cid, sid, rul) => {
   try {
-    const rul = [
-      'tpm2rules/PCRsAllUnassigned',
-      {
-        bank: 'sha256',
-      },
-    ]
     const body = JSON.stringify({
       cid: cid,
       rule: rul,
@@ -125,7 +127,7 @@ const startAttestation = async (eid: string) => {
   try {
     sessionId = await openSession()
     const attest = await runAttestAndVerify(sessionId, eid)
-    const results = await getResult(attest.pcReadAttest)
+    const results = await getResult(attest)
     if (results) {
       await closeSession(sessionId)
       return results

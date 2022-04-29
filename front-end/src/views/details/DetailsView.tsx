@@ -7,7 +7,7 @@ import StatusRedIcon from '../../assets/icons/status_red.svg'
 import StatusGreenIcon from '../../assets/icons/status_green.svg'
 import StatusYellowIcon from '../../assets/icons/status_yellow.svg'
 import DataGraph from '../../components/DataGraph/DataGraph'
-import {useLocation} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 
 const DetailsView: React.FC = () => {
   const {fetchDevice, attestDevice} = useDevices()
@@ -78,7 +78,9 @@ const DetailsView: React.FC = () => {
 
   return (
     <div>
-      <div className="device-details-title">Device details</div>
+      <Link to={`/`} className="device-details-title">
+        <p className="device-details-title">Back to device list</p>
+      </Link>
       <div className="details-view-header">
         <img className="details-view-status-img" src={statusIcon}></img>
         <h1>{device?.name}</h1>

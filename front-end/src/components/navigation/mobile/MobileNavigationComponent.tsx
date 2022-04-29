@@ -8,16 +8,18 @@ type ChildProps = {
 }
 
 const MobileNavigationComponent: React.FC<ChildProps> = ({toggleMenu}) => {
+  const unreadNotifications = true
   return (
     <div className="nav-bar">
       <NokiaBellLabsLogo />
-      <div className="burger" onClick={toggleMenu}>
+      <div className="icon-container" onClick={toggleMenu}>
         <Icon
           className="icon"
           icon="ic:outline-notifications"
           color="white"
           width="22"
         />
+        {unreadNotifications ? <div className="red-dot"></div> : <></>}
       </div>
     </div>
   )

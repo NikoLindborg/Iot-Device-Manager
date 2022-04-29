@@ -1,18 +1,24 @@
 import {INotification} from './../types/notificationType'
-import { ISensorData } from './../types/sensorDataType';
 import {IChannel} from './../types/channelType'
 import {IDevice} from '../types/deviceType'
-import {useState, useEffect} from 'react'
+import {useState, useEffect, useContext} from 'react'
 import {
   wsLocalHostUrl,
   apiUrl,
   channelUrl,
   notificationUrl,
 } from '../globals/globals'
+import {
+  NotificationContext,
+  INotifications,
+} from '../contexts/NotificationContext'
 
 export const useDevices = () => {
   const [devices, setDevices] = useState<IDevice[]>([])
   const [connection, setConnection] = useState<WebSocket>()
+  const {setUnreadNotification} = useContext(
+    NotificationContext
+  ) as INotifications
 
   useEffect(() => {
     const server = new WebSocket(wsLocalHostUrl)
@@ -30,6 +36,7 @@ export const useDevices = () => {
       console.log(device.data)
       const newDevice = JSON.parse(device.data as unknown as string) as IDevice
       console.log('asda', newDevice)
+      setUnreadNotification(true)
       setDevices([...devices, newDevice])
     }
   }
@@ -82,10 +89,17 @@ export const useChannels = () => {
 
 export const useNotifications = () => {
   const [notifications, setNotifications] = useState<INotification[]>([])
+  const {setUnreadNotification} = useContext(
+    NotificationContext
+  ) as INotifications
 
   useEffect(() => {
     fetchNotifications()
   }, [])
+
+  useEffect(() => {
+    setUnreadNotification(false)
+  }, [notifications])
 
   const fetchNotifications = async () => {
     const response = await fetch(notificationUrl)

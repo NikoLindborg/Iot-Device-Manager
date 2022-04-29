@@ -1,11 +1,12 @@
+import startAttestation from '../a10/a10services'
+import {updateAttestation, updateMongoDevice} from '../mongo/mongoServices'
 import {Device} from '../schemas/device'
-import { SensorData } from '../schemas/sensorData'
+import {SensorData} from '../schemas/sensorData'
 import {IDevice} from '../types/deviceType'
-import { ISensorData } from '../types/sensorDataType'
+import {ISensorData} from '../types/sensorDataType'
 
 /** Return list of all the devices from MongoDB */
 export const getDevices = async (req, res) => {
-  res.set('Access-Control-Allow-Origin', '*')
   try {
     const devices = await Device.find({})
     res.status(200).json(devices)
@@ -16,24 +17,25 @@ export const getDevices = async (req, res) => {
 }
 
 export const getDevice = async (req, res) => {
-  res.set('Access-Control-Allow-Origin', '*')
   try {
     const device = await Device.findById(req.params.id)
     res.status(200).json(device)
   } catch (error) {
     res.status(404)
-    throw new Error ('Device not found!')
+    throw new Error('Device not found!')
   }
 }
 
 export const getDeviceSensorData = async (req, res) => {
   res.set('Access-Control-Allow-Origin', '*')
   try {
-    const sensorData = await SensorData.find({deviceId: req.params.id}) as unknown as ISensorData
+    const sensorData = (await SensorData.find({
+      deviceId: req.params.id,
+    })) as unknown as ISensorData
     res.status(200).json(sensorData)
   } catch (error) {
     res.status(404)
-    throw new Error ('Data for device not found!')
+    throw new Error('Data for device not found!')
   }
 }
 
@@ -80,6 +82,25 @@ export const deleteDevice = async (req, res) => {
   try {
     const device = await Device.findByIdAndDelete(req.params.id)
     res.status(200).json(device)
+  } catch (error) {
+    console.log(error)
+    res.status(400)
+  }
+}
+
+export const getAttestDevice = async (req, res) => {
+  try {
+    const attestationStatus = await startAttestation(req.params.id)
+    console.log('attesting')
+    const device = await Device.findById(req.params.id)
+    const updateHistory = await updateAttestation(
+      attestationStatus,
+      req.params.id,
+      device.name
+    ).then(async () => {
+      const newDevice = await Device.findById(req.params.id)
+      res.status(200).json(newDevice)
+    })
   } catch (error) {
     console.log(error)
     res.status(400)

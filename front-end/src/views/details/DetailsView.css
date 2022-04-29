@@ -23,6 +23,23 @@
 .details-view-header img{
   margin: 0.3rem 0.3rem 0.3rem 0;
 }
+.attestation-button{
+  margin: 0.3rem 0.3rem 0.3rem 1rem;
+  padding: 0.3rem 0.3rem 0.3rem 0.3rem;
+  height: 33px;
+  text-align: center;
+  justify-content: center;
+  border-radius: 0.3rem;
+  background: rgb(255, 255, 255);
+  background: linear-gradient(180deg, #2f3e47 0%, #1e232e 100%);
+}
+.attestation-button:hover{
+  background: rgb(255, 255, 255);
+  background: linear-gradient(180deg, #1e232e 0%, #2f3e47 100%);
+}
+.attestation-button:active{
+  background: linear-gradient(90deg, #2f3e47 0%, #2f3e47 100%);
+}
 
 .details-view-body{
   height: auto;

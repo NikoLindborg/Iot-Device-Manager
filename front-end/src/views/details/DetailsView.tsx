@@ -7,28 +7,31 @@ import StatusRedIcon from '../../assets/icons/status_red.svg'
 import StatusGreenIcon from '../../assets/icons/status_green.svg'
 import StatusYellowIcon from '../../assets/icons/status_yellow.svg'
 import DataGraph from '../../components/DataGraph/DataGraph'
-import {Link} from 'react-router-dom'
+import {Link, useLocation} from 'react-router-dom'
 
-interface DetailsViewProps {
-  id?: string
-}
-
-const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
-  const {fetchDevice} = useDevices()
+const DetailsView: React.FC = () => {
+  const {fetchDevice, attestDevice} = useDevices()
   const [device, setDevice] = useState<IDevice>()
   const [statusIcon, setStatusIcon] = useState('')
   const [selectedData, setSelectedData] = useState('')
+  const [sortableData, setSortableData] = useState<string[]>()
+  const location = useLocation()
+  const id = location.pathname.substring(1)
 
   useEffect(() => {
     const fetch = async () => {
       try {
+        const sorted = ['attestation history']
         if (id) {
           const fetchedDevice = await fetchDevice(id)
           setDevice(fetchedDevice)
           if (fetchedDevice.channels) {
-            setSelectedData(fetchedDevice.channels[0])
+            fetchedDevice.channels.forEach((channel: string) => {
+              sorted.push(channel)
+            })
           }
         }
+        setSortableData(sorted)
       } catch (error) {
         console.log(error)
       }
@@ -37,16 +40,22 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
   }, [])
 
   useEffect(() => {
+    if (sortableData) {
+      setSelectedData(sortableData[0])
+    }
+  }, [sortableData])
+
+  useEffect(() => {
     if (device) {
       if (device.trustedState) {
         if (device.trustedState == 0) {
           setStatusIcon(StatusGreenIcon)
         }
-        if (device.trustedState == 1) {
-          setStatusIcon(StatusRedIcon)
-        }
-        if (device.trustedState != 0 && device.trustedState != 1) {
+        if (device.trustedState == 2) {
           setStatusIcon(StatusYellowIcon)
+        }
+        if (device.trustedState != 2 && device.trustedState != 0) {
+          setStatusIcon(StatusRedIcon)
         }
       }
     }
@@ -54,6 +63,17 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
 
   const setSelectedGraphData = (dataLabel: string) => {
     setSelectedData(dataLabel)
+  }
+
+  const attest = async () => {
+    if (
+      window.confirm('Are you sure you want to manually attest the device?')
+    ) {
+      const newDevice = await attestDevice(id)
+      if (newDevice) {
+        setDevice(newDevice)
+      }
+    }
   }
 
   return (
@@ -64,6 +84,9 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
       <div className="details-view-header">
         <img className="details-view-status-img" src={statusIcon}></img>
         <h1>{device?.name}</h1>
+        <div className="attestation-button" onClick={attest}>
+          Attest manually
+        </div>
       </div>
       <div className="details-view-body">
         <div className="details-view-graph-container">
@@ -71,15 +94,16 @@ const DetailsView: React.FC<DetailsViewProps> = ({id}) => {
             dataGraphItems={{
               selectedData: selectedData,
               id: id,
+              device: device || undefined,
             }}
-          ></DataGraph>
+          />
         </div>
         <div className="details-view-component-header">
           <h1>Sort by</h1>
         </div>
         <div className="details-view-component-container">
-          {device?.channels ? (
-            device.channels.map((channel, i) => (
+          {sortableData ? (
+            sortableData.map((channel, i) => (
               <DetailComponent
                 key={i}
                 componentItems={{

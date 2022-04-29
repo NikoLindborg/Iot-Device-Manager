@@ -97,4 +97,31 @@ const updateSubscribedChannels = (
   }
 }
 
-export {updateMongoDevice, createNewMongoDevice, updateSubscribedChannels}
+const updateAttestation = async (attestStatus: number, id: string, name: string):Promise<any> => {
+  try {
+    try {
+      Device.findOneAndUpdate(
+        {_id: id},
+        {
+          trustedState: attestStatus,
+          $push: {
+            history: {
+              name: name,
+              timestamp: Date.now()/1000,
+              trustedState: attestStatus,
+            },
+          },
+        },
+        (err, docs) => {
+          return docs.history
+        }
+      )
+    } catch (error) {
+      console.log('mongodb error', error)
+    }
+  } catch (error) {
+
+  }
+}
+
+export {updateMongoDevice, createNewMongoDevice, updateSubscribedChannels, updateAttestation}

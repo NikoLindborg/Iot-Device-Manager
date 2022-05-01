@@ -19,13 +19,13 @@ const StatusComponent: React.FC<StatusComponentProps> = ({devices}) => {
 
   const calculateUntrustedDevices = () =>
     devices.filter(
-      (device) => device.trustedState != 0 && device.trustedState != 1
+      (device) => device.trustedState != 0 && device.trustedState != 2
     ).length
 
   const statusData = {
     totalDeviceAmount: devices.length,
     trustedDeviceAmount: calculateDeviceStatuses(0),
-    offlineDeviceAmount: calculateDeviceStatuses(1),
+    offlineDeviceAmount: calculateDeviceStatuses(2),
     untrustedDeviceAmount: calculateUntrustedDevices(),
   }
 

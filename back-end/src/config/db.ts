@@ -4,7 +4,6 @@ const url = `${process.env.MONGODB_URL}` || '' //your url here
 
 const connectDB = async () => {
   try {
-    console.log(url)
     const conn = await mongoose.connect(url)
     console.log(`MongoDB connected: ${conn.connection.host}`)
   } catch (error) {

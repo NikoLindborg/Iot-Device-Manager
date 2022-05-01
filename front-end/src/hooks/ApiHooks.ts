@@ -32,14 +32,9 @@ export const useDevices = () => {
       console.log(`WebSocket error: ${error}`)
     }
 
-    connection.onmessage = (device) => {
-      /* Blob error issue number #65
-      if (device.data instanceof Blob) {}*/
-      console.log(device.data)
-      const newDevice = JSON.parse(device.data as unknown as string) as IDevice
-      const newDevices = replaceElement(newDevice, devices)
-      setDevices(newDevices)
+    connection.onmessage = () => {
       setUnreadNotification(true)
+      fetchDevices()
     }
   }
   useEffect(() => {

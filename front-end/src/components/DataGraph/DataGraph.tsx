@@ -30,28 +30,53 @@ interface DataGraphProps {
   dataGraphItems: {
     selectedData?: string
     id?: string
-    device?: IDevice
   }
 }
 
+interface statusColors {
+  color: string
+  timestamp: number
+}
+
 const DataGraph: React.FC<DataGraphProps> = ({dataGraphItems}) => {
-  const {fetchDeviceData} = useDevices()
+  const {fetchDeviceData, fetchDevice} = useDevices()
   const [deviceData, setDeviceData] = useState<ISensorData[]>([])
+  const [historyColors, setHistoryColors] = useState<statusColors[]>()
+  const [device, setDevice] = useState<IDevice>()
 
   useEffect(() => {
     const fetch = async () => {
       try {
         if (dataGraphItems.id) {
           const fetchedDeviceData = await fetchDeviceData(dataGraphItems.id)
+          const fetchedDevice = await fetchDevice(dataGraphItems.id)
+          setDevice(fetchedDevice)
           setDeviceData(fetchedDeviceData)
         }
-        console.log(data.datasets)
       } catch (error) {
         console.log(error)
       }
     }
     fetch()
   }, [])
+
+  useEffect(() => {
+    const mappedHistory = device?.history?.map((device) => {
+      let color: string
+      if (device.trustedState == 0) {
+        color = 'rgb(72, 200, 100)'
+      } else if (device.trustedState == 2) {
+        color = 'rgb(255, 99, 132)'
+      } else {
+        color = 'rgb(255, 205, 5)'
+      }
+      return {
+        timestamp: Math.round(device.timestamp),
+        color: color,
+      }
+    }) as statusColors[]
+    setHistoryColors(mappedHistory)
+  }, [device])
 
   const options = {
     responsive: true,
@@ -84,101 +109,102 @@ const DataGraph: React.FC<DataGraphProps> = ({dataGraphItems}) => {
   }
 
   const getGraphData = (chosenData?: String) => {
-    if (dataGraphItems.device) {
-      if (
-        chosenData == 'attestation history' &&
-        dataGraphItems.device.history
-      ) {
-        const graphData = dataGraphItems.device.history.map((history) => {
-          return history.trustedState
-        })
-        return graphData
-      }
+    if (chosenData == 'attestation history') {
+      const graphData = device?.history?.map((history) => {
+        return history.trustedState
+      })
+      return graphData
     }
 
-    if (deviceData) {
-      const graphData = deviceData.map((sensor) => {
-        if (sensor.sensorType == chosenData) {
-          return sensor.sensorValue
-        }
-      })
-      console.log(graphData)
-      return graphData
-    } else {
-      console.log('get graph data failed')
-    }
+    const graphData = deviceData?.map((sensor) => {
+      if (sensor.sensorType == chosenData) {
+        return sensor.sensorValue
+      }
+    })
+    return graphData
+  }
+
+  const parseDate = (timestamp: number) => {
+    return new Date(timestamp * 1000).toLocaleString('fi-FI')
   }
 
   const getGraphDataLabels = (chosenData?: String) => {
-    if (dataGraphItems.device) {
-      if (
-        chosenData == 'attestation history' &&
-        dataGraphItems.device.history
-      ) {
-        const graphDataLabels = dataGraphItems.device.history.map((history) => {
-          return new Date(Number(history.timestamp) * 1000).toLocaleString(
-            'fi-FI'
-          )
-        })
-        return graphDataLabels
-      }
-    }
-
-    if (deviceData) {
-      const graphDataLabels = deviceData.map((sensor) => {
-        if (sensor.sensorType == chosenData) {
-          return new Date(Number(sensor.timestamp) * 1000).toLocaleString(
-            'fi-FI'
-          )
-        }
+    if (chosenData == 'attestation history') {
+      const graphDataLabels = device?.history?.map((history) => {
+        return parseDate(history.timestamp)
       })
       return graphDataLabels
-    } else {
-      console.log('get graph data labels failed')
     }
+
+    const graphDataLabels = deviceData.map((sensor) => {
+      if (sensor.sensorType == chosenData) {
+        return new Date(Number(sensor.timestamp) * 1000).toLocaleString('fi-FI')
+      }
+    })
+    return graphDataLabels
   }
 
   const labels = getGraphDataLabels(dataGraphItems.selectedData)
 
-  const skipped = (ctx: any, value: any) =>
-    ctx.p0.skip || ctx.p1.skip ? value : undefined
-  const down = (ctx: any, value: any) =>
-    ctx.p0.parsed.y > ctx.p1.parsed.y ? value : undefined
-  const up = (ctx: any, value: any) =>
-    ctx.p0.parsed.y < ctx.p1.parsed.y ? value : undefined
-
-  const trusted = (ctx: any, value: string) => {
-    if (dataGraphItems.selectedData == 'attestation history') {
-      console.log(ctx.p0.parsed.y == 0)
-      console.log(ctx.p0.parsed.y)
-      if (ctx.p0.parsed.y == 0 && ctx.p0.parsed.y == ctx.p1.parsed.y) {
-        return value
+  const getDateStamps = () => {
+    const array = deviceData.map((sensor) => {
+      if (sensor.sensorType == dataGraphItems.selectedData) {
+        return parseInt(sensor.timestamp)
       }
-      if (down(ctx, value) && ctx.p1.parsed.y == 0) {
-        return value
-      }
-      return undefined
-    }
+    })
+    return array
   }
 
-  const untrusted = (ctx: any, value: string) => {
-    if (dataGraphItems.selectedData == 'attestation history') {
-      console.log(ctx.p0.parsed.y == 0)
-      console.log(ctx.p0.parsed.y)
-      if (ctx.p0.parsed.y > 2 && ctx.p0.parsed.y == ctx.p1.parsed.y) {
-        return value
-      }
-      if (up(ctx, value) && ctx.p1.parsed.y > 2) {
-        return value
-      }
-      return undefined
+  const checkNumbers = (lower: number, upper: number, data: number) => {
+    const isInRange = (value: number) => {
+      return value >= lower && value <= upper
     }
+    const val = isInRange(data)
+    if (val && historyColors) {
+      const color = historyColors.filter((el) => {
+        return el.timestamp == lower
+      })
+      return color[0].color
+    }
+    return val
   }
 
-  const offline = (ctx: any, value: string) => {
-    return ctx.p0.parsed.y == 2 && ctx.p0.parsed.y == ctx.p1.parsed.y
-      ? value
-      : undefined
+  const trusted = (ctx: any): string => {
+    if (dataGraphItems.selectedData == 'attestation history') {
+      if (historyColors) {
+        return historyColors[ctx.p1.parsed.x].color
+      }
+    } else {
+      const timestamps = getDateStamps()
+      const color = historyColors?.filter((e, i) => {
+        if (timestamps) {
+          if (historyColors[i + 1]) {
+            const value = checkNumbers(
+              e.timestamp,
+              historyColors[i + 1].timestamp,
+              timestamps[ctx.p1.parsed.x] || 0
+            )
+            if (value) {
+              return value
+            }
+          } else {
+            const value = checkNumbers(
+              e.timestamp,
+              timestamps[ctx.p1.parsed.x] || 0,
+              timestamps[ctx.p1.parsed.x] || 0
+            )
+            if (value) {
+              return value
+            }
+          }
+        }
+      })
+      if (color) {
+        return color[0].color
+      }
+    }
+
+    return 'rgb(255, 99, 132)'
   }
 
   const data = {
@@ -192,12 +218,7 @@ const DataGraph: React.FC<DataGraphProps> = ({dataGraphItems}) => {
         backgroundColor: 'rgba(255, 99, 132, 0.5)',
         yAxisID: 'y',
         segment: {
-          borderColor: (ctx: any) =>
-            skipped(ctx, 'rgb(0,0,0,0.2)') ||
-            trusted(ctx, 'rgb(72, 200, 100)') ||
-            untrusted(ctx, 'rgb(255, 205, 5)') ||
-            offline(ctx, 'rgb(255, 99, 132)'),
-          borderDash: (ctx: any) => skipped(ctx, [6, 6]),
+          borderColor: (ctx: any) => trusted(ctx),
         },
       },
     ],

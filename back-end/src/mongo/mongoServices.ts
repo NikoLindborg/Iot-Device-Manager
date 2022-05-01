@@ -4,7 +4,8 @@ import {SubscribedChannel} from '../schemas/subscribedChannel'
 import {ifAnnouncements} from './../types/announcementType'
 import WebSocket from 'ws'
 
-const updateMongoDevice = (message: ifAnnouncements, attestStatus: number) => {
+const updateMongoDevice = (message: ifAnnouncements, attestStatus: number,
+  wss) => {
   try {
     DeviceNotification.create({
       deviceId: message._id,
@@ -25,7 +26,14 @@ const updateMongoDevice = (message: ifAnnouncements, attestStatus: number) => {
           },
         },
       },
-      () => {}
+      (err, docs) => {
+        wss.clients.forEach((client) => {
+          if (client.readyState === WebSocket.OPEN) {
+            console.log('SENT MESSAGE')
+            client.send(JSON.stringify(docs))
+          }
+        })
+      }
     )
   } catch (error) {
     console.log('mongodb error', error)
@@ -87,8 +95,6 @@ const updateSubscribedChannels = (
             name: channel,
             devices: message._id,
           })
-        } else {
-          console.log(docs)
         }
       }
     )
@@ -97,7 +103,7 @@ const updateSubscribedChannels = (
   }
 }
 
-const updateAttestation = async (attestStatus: number, id: string, name: string):Promise<any> => {
+const updateAttestation = async (attestStatus: number, id: string):Promise<any> => {
   try {
     try {
       Device.findOneAndUpdate(
@@ -106,7 +112,6 @@ const updateAttestation = async (attestStatus: number, id: string, name: string)
           trustedState: attestStatus,
           $push: {
             history: {
-              name: name,
               timestamp: Date.now()/1000,
               trustedState: attestStatus,
             },

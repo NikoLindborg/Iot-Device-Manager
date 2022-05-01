@@ -50,7 +50,7 @@ const mqttClient = () => {
         const message: ifAnnouncements = JSON.parse(payload.toString())
         announcementService(message, topics, client, wss)
         console.log(
-          `Received message from topic: ${topic} reading out: ${message.channels[0]} ${message.channels[1]}`
+          `Received message from topic: ${topic} reading out: ${payload.toString()}`
         )
       } catch (error) {
         console.error('error occurred trying to read announcements', error)

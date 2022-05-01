@@ -111,7 +111,7 @@ const getResult = async (resultId): Promise<{result: number}> => {
     return results.data.result
   } catch (error) {
     console.log('something wrong with getting the result', error)
-    return {result: 2}
+    return {result: 3}
   }
 }
 

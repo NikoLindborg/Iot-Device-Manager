@@ -55,7 +55,6 @@ const closeSession = async (sid) => {
 
 const runAttestAndVerify = async (sid, eid) => {
   try {
-    console.log('first eid', eid)
     const pcReadAttest = await runAttest(sid, policyId, cps, eid, rul)
     const cps2 = await getProtocolParameters(eid)
     const credentialCheckAttest = await runAttest(
@@ -75,14 +74,7 @@ const runAttestAndVerify = async (sid, eid) => {
 
 const runAttest = async (sid, policyId, claimPolicy, eid, rul) => {
   try {
-    console.log('second eid', eid)
     const body = JSON.stringify({
-      eid: eid,
-      pid: policyId,
-      cps: claimPolicy,
-      sid: sid,
-    })
-    console.log('body', {
       eid: eid,
       pid: policyId,
       cps: claimPolicy,
@@ -112,27 +104,26 @@ const runVerify = async (cid, sid, rul) => {
   }
 }
 
-const getResult = async (resultId): Promise<number> => {
+const getResult = async (resultId): Promise<{result: number}> => {
   try {
     const results = await axios.get(`${url}/result/${resultId}`)
     console.log('succesfully got results', results.data)
     return results.data.result
   } catch (error) {
     console.log('something wrong with getting the result', error)
-    return 1
+    return {result: 2}
   }
 }
 
 const startAttestation = async (eid: string) => {
   try {
-    /*sessionId = await openSession()
+    sessionId = await openSession()
     const attest = await runAttestAndVerify(sessionId, eid)
-    const results = await getResult(attest)
+    const results = await getResult(attest.result)
     if (results) {
       await closeSession(sessionId)
-      return results
-    }*/
-    return 0
+      return results.result
+    }
   } catch (error) {
     console.log('something went wrong running the script', error)
   }

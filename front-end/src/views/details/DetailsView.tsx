@@ -52,10 +52,10 @@ const DetailsView: React.FC = () => {
           setStatusIcon(StatusGreenIcon)
         }
         if (device.trustedState == 2) {
-          setStatusIcon(StatusYellowIcon)
+          setStatusIcon(StatusRedIcon)
         }
         if (device.trustedState != 2 && device.trustedState != 0) {
-          setStatusIcon(StatusRedIcon)
+          setStatusIcon(StatusYellowIcon)
         }
       }
     }
@@ -94,7 +94,6 @@ const DetailsView: React.FC = () => {
             dataGraphItems={{
               selectedData: selectedData,
               id: id,
-              device: device || undefined,
             }}
           />
         </div>

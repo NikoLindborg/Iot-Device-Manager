@@ -15,13 +15,14 @@ connectDB()
 console.log('The WebSocket server is running on port 8080')
 mqttClient()
 
+app.use(express.static('build'))
 app.use(cors())
 app.use('/api/devices', deviceRoutes)
 app.use('/api/channels', channelRoutes)
 app.use('/api/notifications', deviceNotificationRoutes)
 
 app.get('/', (req, res) => {
-  res.send('Hello World!')
+  res.send('build')
 })
 
 app.listen(port, () => {

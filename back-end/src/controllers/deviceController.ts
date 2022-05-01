@@ -91,12 +91,9 @@ export const deleteDevice = async (req, res) => {
 export const getAttestDevice = async (req, res) => {
   try {
     const attestationStatus = await startAttestation(req.params.id)
-    console.log('attesting')
-    const device = await Device.findById(req.params.id)
     const updateHistory = await updateAttestation(
       attestationStatus,
-      req.params.id,
-      device.name
+      req.params.id
     ).then(async () => {
       const newDevice = await Device.findById(req.params.id)
       res.status(200).json(newDevice)

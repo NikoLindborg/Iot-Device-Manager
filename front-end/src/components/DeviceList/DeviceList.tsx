@@ -14,9 +14,6 @@ interface ListProps {
   selectedChannel: string
   selectedStatus: string
 }
-const handleClick = (id: string) => {
-  console.log(`device id, ${id}`)
-}
 
 const DeviceList: React.FC<ListProps> = ({
   devices,
@@ -84,18 +81,17 @@ const DeviceList: React.FC<ListProps> = ({
               icon:
                 device.trustedState == 0
                   ? StatusGreenIcon
-                  : device.trustedState == 1
+                  : device.trustedState == 2
                   ? StatusRedIcon
                   : StatusYellowIcon,
               label: device.name || '',
               info:
                 device.trustedState == 0
                   ? 'Device is trusted'
-                  : device.trustedState == 1
+                  : device.trustedState == 2
                   ? 'Device is offline'
                   : 'Device is untrusted',
             }}
-            clickHandler={handleClick}
           />
         </Link>
       )

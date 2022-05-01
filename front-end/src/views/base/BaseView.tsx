@@ -25,7 +25,6 @@ const BaseView: React.FC = () => {
 
   useEffect(() => {
     window.addEventListener('resize', handleResize)
-    console.log('ey yo')
   }, [])
 
   const toggleMenu = () => {

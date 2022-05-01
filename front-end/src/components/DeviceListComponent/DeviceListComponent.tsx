@@ -8,19 +8,14 @@ interface DeviceListProps {
     label: string
     info: string
   }
-  clickHandler: Function
 }
 
 const DeviceListComponent: React.FC<DeviceListProps> = ({
   componentItems,
-  clickHandler,
   id,
 }) => {
   return (
-    <div
-      onClick={() => clickHandler(id)}
-      className="device-list-component-container"
-    >
+    <div className="device-list-component-container">
       <div className="device-list-component-left">
         <img
           className="device-list-component-img"

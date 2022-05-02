@@ -11,4 +11,4 @@ client.connect(mqttBroker, port=1883, bind_address='')
 
 MQTT_MSG=json.dumps({"deviceName": deviceName, "_id": "38c28ce0-d49f-47f8-aa77-e14c42504657", "channels":  ["light", "noise"],  "timestamp": datetime.timestamp(datetime.now()), "disconnect": True});
 
-client.publish('ANNOUNCEMENT', MQTT_MSG)
+client.publish('ANNOUNCEMENTS', MQTT_MSG)

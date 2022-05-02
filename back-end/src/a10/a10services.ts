@@ -121,11 +121,13 @@ const startAttestation = async (eid: string) => {
     const attest = await runAttestAndVerify(sessionId, eid)
     const results = await getResult(attest.result)
     if (results) {
+
       await closeSession(sessionId)
       return results.result
     }
   } catch (error) {
     console.log('something went wrong running the script', error)
+    return 3
   }
 }
 

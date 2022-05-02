@@ -9,14 +9,15 @@ import {router as channelRoutes} from './routes/channelRoutes'
 import {router as deviceNotificationRoutes} from './routes/deviceNotificationRoutes'
 
 import mqttClient from './mqtt/mqtt'
-
+app.use(cors())
+app.enable('trust proxy');
 connectDB()
 
 console.log('The WebSocket server is running on port 8080')
 mqttClient()
 
 app.use(express.static('build'))
-app.use(cors())
+
 app.use('/api/devices', deviceRoutes)
 app.use('/api/channels', channelRoutes)
 app.use('/api/notifications', deviceNotificationRoutes)

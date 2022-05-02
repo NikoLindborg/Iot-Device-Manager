@@ -45,7 +45,7 @@ const mqttClient = () => {
 
 
   client.on('message', (topic, payload) => {
-    if (topic == 'ANNOUNCEMENT') {
+    if (topic == originalTopic) {
       try {
         const message: ifAnnouncements = JSON.parse(payload.toString())
         announcementService(message, topics, client, wss)

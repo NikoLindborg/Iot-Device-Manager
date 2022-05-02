@@ -23,12 +23,12 @@ const NotificationComponent: React.FC<NotificationProps> = ({
         className="status-dot"
         style={
           // eslint-disable-next-line prettier/prettier
-          notification.status == 1 ? {background: '#49C364'} : notification.status == 2 ? {background: '#FA4C5C'} : {background: '#FFCD05'}
+          notification.status == 0 ? {background: '#49C364'} : notification.status == 2 ? {background: '#FA4C5C'} : {background: '#FFCD05'}
         }
       ></div>
       <div className="notification-text-container">
         <div className="notification-component-header bold">
-          {notification.status == 1
+          {notification.status == 0
             ? `${notification.deviceName} is trusted`
             : notification.status == 2
             ? `${notification.deviceName} disconnected`

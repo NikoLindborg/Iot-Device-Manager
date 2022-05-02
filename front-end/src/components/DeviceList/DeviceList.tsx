@@ -31,10 +31,10 @@ const DeviceList: React.FC<ListProps> = ({
       setStatusFilter(0)
     }
     if (selectedStatus == 'Offline') {
-      setStatusFilter(1)
+      setStatusFilter(2)
     }
     if (selectedStatus == 'Untrusted') {
-      setStatusFilter(2)
+      setStatusFilter(3)
     }
   }, [selectedStatus])
 
@@ -51,8 +51,8 @@ const DeviceList: React.FC<ListProps> = ({
   const mappedDevicesByState = devices.map((device) => {
     if (
       device.trustedState != 0 &&
-      device.trustedState != 1 &&
-      statusFilter == 2
+      device.trustedState != 2 &&
+      statusFilter == 3
     ) {
       return device
     }

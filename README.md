@@ -1,66 +1,116 @@
 # Iot-Device-Manager
 
-Team project for Metropolia UAD in collaboration with Nokia Bell Labs.
+Team project for Metropolia UAS in collaboration with Nokia Bell Labs.
 
 Authors Jaani Kaukonen, Aleksi Kosonen, Niko Lindborg and Aleksi Kytö. 
 
 # About Iot-Device-Manager
 
+Web application for showcasing the possibilities Nokia
+Bell Lab’s Attestation Engine provides. Main focus being
+the integrity of a given device while providing critical
+data in altering scenarios.
+
+With our everyday life increasingly relying on IoT-based
+systems - quarateeing safe usage of such is crucial. The
+core purpose of IoT Device Manager aims to provide
+security for critical infrastructure such as railway
+systems and medical devices, without forgetting the
+rapidly growing demand for smart homes.
 
 # Installation 
 
-1. Clone repository
+In order to run the application you will need Mongo Database, MQTT-server and an Attestation Server.
+
+Clone repository
+
 ```
 git clone https://github.com/NikoLindborg/Iot-Device-Manager
 ```
-2. Install NPM packages
+
+### To run production web application
+
+1. Move to back-end directory
+
+```
+cd back-end
+```
+
+2. Install npm packages
+
 ```
 npm i
 ```
-3. Run the app
+
+3. Change url related variables in `back-end/src/utils/GlobalVariables.ts`
+
+```
+const host = 'your-mqtt-server'
+const mqttPort = '1883'
+const clientId = `your-mqtt-client-id`
+const originalTopic = 'ANNOUNCEMENTS'
+const connectUrl = `mqtt://${host}:${mqttPort}`
+
+const a10RestApi = 'your-attestation-engine-url'
+```
+
+4. Configure your Mongo Database url
+
+```
+Either with `.env` file with MONGODB_URL = your-url
+
+Or change url variable in `back-end/src/config/db.ts` to
+
+const url = `${process.env.MONGODB_URL}` || '' //your url here
+
+```
+
+5. Start application 
+
+```
+Either start the application with nodemon by running `npm start`
+
+Or `npm run start-production`
+```
+
+## To run front-end locally
+
+1. Move to front-end directory
+```
+cd front-end
+```
+
+2. Install npm packages 
+```
+npm i
+```
+
+3. Change variables in `front-end/src/globals/globals.ts`
+```
+const wsLocalHostUrl = `ws://${your-backend-url}:8080`
+const apiUrl = `your-backend-url/api/devices`
+const channelUrl = `your-backend-url/api/channels`
+const notificationUrl = `your-backend-url/api/notifications/`
+```
+
+4. Run the application
 ```
 npm start
 ```
 
-## Available Scripts
+## To develop front-end locally and move it to back-end build file
 
-In the project directory, you can run:
+1. Change variables back to original in `front-end/src/globals/globals.ts`
+```
+const wsLocalHostUrl = `ws://${hostname}:8080`
+const apiUrl = `/api/devices`
+const channelUrl = `/api/channels`
+const notificationUrl = `/api/notifications/`
+```
 
-### `npm start`
+2. Make a build folder
+```
+npm run build
+```
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
-
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
-
-### `npm test`
-
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
-
-### `npm run build`
-
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
-
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
-
-### `npm run eject`
-
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
-
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
-
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
-
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
+3. Move the build folder to back-end directory replacing the existing one

@@ -80,6 +80,7 @@ const DataGraph: React.FC<DataGraphProps> = ({dataGraphItems}) => {
 
   const options = {
     responsive: true,
+
     interaction: {
       mode: 'index' as const,
       intersect: false,
@@ -103,6 +104,13 @@ const DataGraph: React.FC<DataGraphProps> = ({dataGraphItems}) => {
         position: 'right' as const,
         grid: {
           drawOnChartArea: false,
+        },
+      },
+      xAxes: {
+        ticks: {
+          autoSkip: true,
+          maxRotation: 0,
+          minRotation: 0,
         },
       },
     },

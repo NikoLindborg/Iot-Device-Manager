@@ -58,16 +58,25 @@ const StatusComponent: React.FC<StatusComponentProps> = ({devices}) => {
       </div>
       <div className="status-calculator-container">
         <div className="status-calculator">
-          <img src={StatusGreenIcon} />
-          <p>{statusData.trustedDeviceAmount} trusted</p>
+          <div className="status-calculator-upper">
+            <img src={StatusGreenIcon} />
+            <p className="status-data">{statusData.trustedDeviceAmount}</p>
+          </div>
+          <p>trusted</p>
         </div>
         <div className="status-calculator">
-          <img src={StatusYellowIcon} />
-          <p>{statusData.untrustedDeviceAmount} untrusted</p>
+          <div className="status-calculator-upper">
+            <img src={StatusYellowIcon} />
+            <p className="status-data">{statusData.untrustedDeviceAmount}</p>
+          </div>
+          <p>untrusted</p>
         </div>
         <div className="status-calculator">
-          <img src={StatusRedIcon} />
-          <p>{statusData.offlineDeviceAmount} offline</p>
+          <div className="status-calculator-upper">
+            <img src={StatusRedIcon} />
+            <p className="status-data">{statusData.offlineDeviceAmount}</p>
+          </div>
+          <p>offline</p>
         </div>
       </div>
     </div>

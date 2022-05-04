@@ -47,6 +47,10 @@
   margin: 0;
 }
 
+.device-list-component-label {
+  letter-spacing: 0.05rem;
+}
+
 .device-list-component-textcontainer {
   display: flex;
   height: 100%;

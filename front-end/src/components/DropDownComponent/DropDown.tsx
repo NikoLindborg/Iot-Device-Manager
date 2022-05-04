@@ -15,6 +15,7 @@ const DropDown: React.FC<DropDownProps> = ({
   initialElement,
 }) => {
   const [isDropDownOpen, setIsDropDownOpen] = useState(false)
+  const [arrowClass, setArrowClass] = useState('arrow-container')
   const [selectedElementIndex, setSelectedElementIndex] = useState(0)
   const [dropDownContentWidth, setDropDownContentWidth] = useState(0)
 
@@ -22,6 +23,17 @@ const DropDown: React.FC<DropDownProps> = ({
 
   const handleClick = () => {
     setIsDropDownOpen(!isDropDownOpen)
+    if (
+      // eslint-disable-next-line operator-linebreak
+      arrowClass == 'arrow-container' ||
+      arrowClass == 'arrow-class animate-reset-dd'
+    ) {
+      setArrowClass('arrow-container animate-dd')
+    } else if (arrowClass == 'arrow-container animate-dd') {
+      setArrowClass('arrow-class animate-reset-dd')
+    } else {
+      setArrowClass('arrow-container')
+    }
   }
 
   const handleChange = (element: string, index: number) => {
@@ -50,7 +62,7 @@ const DropDown: React.FC<DropDownProps> = ({
       >
         <div className="dropdown-button-container">
           <div className="dropdown-button-text">{selectedElement}</div>{' '}
-          <div className="arrow-container">
+          <div className={arrowClass}>
             <i className="arrow"></i>
           </div>
         </div>

@@ -24,6 +24,7 @@
   z-index: 10;
   top:0;
   background-color: #1E232E;
+  letter-spacing: 0.02rem;
 }
 
 .notification-footer {

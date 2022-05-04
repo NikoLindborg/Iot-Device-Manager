@@ -77,44 +77,48 @@ const DetailsView: React.FC = () => {
   }
 
   return (
-    <div>
-      <Link to={`/`} className="device-details-title">
-        <p className="device-details-title">Back to device list</p>
-      </Link>
+    <div className="details-content-container">
       <div className="details-view-header">
-        <img className="details-view-status-img" src={statusIcon}></img>
-        <h1>{device?.name}</h1>
-        <div className="attestation-button" onClick={attest}>
+        <div className="device-icon-and-title">
+          <img className="details-view-status-img" src={statusIcon}></img>
+          <h1>{device?.name}</h1>
+        </div>
+      </div>
+      <div className="breadcrumb-container">
+        <Link to={`/`} className="device-details-title">
+          <button className="breadcrumb-button">{'< Back to devices'}</button>
+        </Link>
+        <div className="breadcrumb-button" onClick={attest}>
           Attest manually
         </div>
       </div>
       <div className="details-view-body">
         <div className="details-view-graph-container">
-          <DataGraph
-            dataGraphItems={{
-              selectedData: selectedData,
-              id: id,
-            }}
-          />
+          <div className="graph-wrapper">
+            <DataGraph
+              dataGraphItems={{
+                selectedData: selectedData,
+                id: id,
+              }}
+            />
+          </div>
         </div>
-        <div className="details-view-component-header">
-          <h1>Sort by</h1>
-        </div>
-        <div className="details-view-component-container">
-          {sortableData ? (
-            sortableData.map((channel, i) => (
-              <DetailComponent
-                key={i}
-                componentItems={{
-                  label: channel,
-                }}
-                clickHandler={setSelectedGraphData}
-              />
-            ))
-          ) : (
-            <></>
-          )}
-        </div>
+      </div>
+      <div className="details-view-component-container">
+        {sortableData ? (
+          sortableData.map((channel, i) => (
+            <DetailComponent
+              key={i}
+              componentItems={{
+                label: channel,
+              }}
+              clickHandler={setSelectedGraphData}
+              selectedChannel={selectedData}
+            />
+          ))
+        ) : (
+          <></>
+        )}
       </div>
     </div>
   )

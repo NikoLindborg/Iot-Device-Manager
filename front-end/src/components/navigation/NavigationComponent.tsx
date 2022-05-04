@@ -6,6 +6,7 @@ import {
   INotifications,
   NotificationContext,
 } from '../../contexts/NotificationContext'
+import {Link} from 'react-router-dom'
 
 type ChildProps = {
   toggleNotificationCenter?: () => void
@@ -17,7 +18,9 @@ const NavigationComponent: React.FC<ChildProps> = ({
   const {unreadNotification} = useContext(NotificationContext) as INotifications
   return (
     <div className="nav-bar">
-      <NokiaBellLabsLogo />
+      <Link to={``}>
+        <NokiaBellLabsLogo />
+      </Link>
       <div className="icon-container">
         <Icon
           className="icon"

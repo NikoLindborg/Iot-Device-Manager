@@ -4,13 +4,14 @@
   flex-direction: column;
   align-items: center;
   justify-content: space-around;
-  margin-top: 1.5rem;
+  margin-top: 1rem;
 }
 
 .status-component {
   width: 11.25rem;
   height: 11.25rem;
   position: relative;
+  margin: 1rem;
 }
 
 .status-description-container {
@@ -31,21 +32,29 @@
 }
 
 .status-calculator-container {
-  margin-top: 2rem;
   display: flex;
   flex-direction: column;
 }
 
 .status-calculator {
   display: flex;
+  flex-direction: row;
   align-items: center;
   justify-content: flex-start;
   margin: 1rem;
 }
 
+.status-calculator-upper {
+  display: flex;
+}
+
+.status-data {
+  margin-right: 0.5rem;
+}
+
 .status-calculator img {
   width: 1rem;
-  margin-right: 1rem;
+  margin-right: 0.5rem;
 }
 
 .status-calculator p {
@@ -55,5 +64,11 @@
 @media only screen and (max-width: 1000px) {
   .status-calculator-container {
     flex-direction: row;
+  }
+  .status-calculator {
+    flex-direction: column;
+  }
+  .status-calculator-upper {
+    display: flex;
   }
 }

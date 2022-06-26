@@ -1,6 +1,7 @@
 # Iot-Device-Manager
 
 Team project for Metropolia UAS in collaboration with Nokia Bell Labs.
+Part of Nokias open source [Attestation Engine](https://github.com/nokia/AttestationEngine)
 
 Authors Jaani Kaukonen, Aleksi Kosonen, Niko Lindborg and Aleksi Kytö. 
 

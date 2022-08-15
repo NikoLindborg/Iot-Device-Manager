@@ -3,19 +3,19 @@ import mqtt from 'mqtt'
 import {connectUrl, clientId, originalTopic} from '../utils/GlobalVariables'
 import {SubscribedChannel} from '../schemas/subscribedChannel'
 import {ISensorData} from '../types/sensorDataType'
-import { announcementService, sensorService } from './mqttServices'
+import {announcementService, sensorService} from './mqttServices'
 import WebSocketClient from '../websocket/websocket'
 
 const mqttClient = () => {
   const {wss} = WebSocketClient()
   const topics = [originalTopic]
   const dbTopics = async () => {
-    try{
+    try {
       const fetchedTopics = await SubscribedChannel.find({})
       fetchedTopics.forEach((topic) => {
         topics.push(topic.name)
       })
-    }catch (error) {
+    } catch (error) {
       console.log('error occurred fetching topics', error)
     }
   }
@@ -42,7 +42,6 @@ const mqttClient = () => {
   } catch (error) {
     console.log('error occurred trying to connect to mqtt', error)
   }
-
 
   client.on('message', (topic, payload) => {
     if (topic == originalTopic) {

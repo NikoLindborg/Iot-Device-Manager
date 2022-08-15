@@ -1,11 +1,11 @@
 import startAttestation from '../a10/a10services'
-import {updateAttestation, updateMongoDevice} from '../mongo/mongoServices'
+import {updateAttestation} from '../mongo/mongoServices'
 import {Device} from '../schemas/device'
 import {SensorData} from '../schemas/sensorData'
 import {IDevice} from '../types/deviceType'
 import {ISensorData} from '../types/sensorDataType'
 
-/** Return list of all the devices from MongoDB */
+// Return list of all the devices from MongoDB
 export const getDevices = async (req, res) => {
   try {
     const devices = await Device.find({})
@@ -39,7 +39,7 @@ export const getDeviceSensorData = async (req, res) => {
   }
 }
 
-/** Create a new device to MongoDB */
+// Create a new device to MongoDB
 export const setDevice = async (newDevice: IDevice, req, res) => {
   if (!newDevice) {
     res.status(400)
@@ -60,7 +60,7 @@ export const setDevice = async (newDevice: IDevice, req, res) => {
   }
 }
 
-/** Update a device in MongoDB by given id */
+// Update a device in MongoDB by given id
 export const updateDevice = async (updatedDevice: IDevice, req, res) => {
   try {
     const device = await Device.findByIdAndUpdate(
@@ -77,7 +77,7 @@ export const updateDevice = async (updatedDevice: IDevice, req, res) => {
   }
 }
 
-/** Delete a device in MongoDB by given id */
+// Delete a device in MongoDB by given id
 export const deleteDevice = async (req, res) => {
   try {
     const device = await Device.findByIdAndDelete(req.params.id)
@@ -91,10 +91,7 @@ export const deleteDevice = async (req, res) => {
 export const getAttestDevice = async (req, res) => {
   try {
     const attestationStatus = await startAttestation(req.params.id)
-    const updateHistory = await updateAttestation(
-      attestationStatus,
-      req.params.id
-    ).then(async () => {
+    updateAttestation(attestationStatus, req.params.id).then(async () => {
       const newDevice = await Device.findById(req.params.id)
       res.status(200).json(newDevice)
     })

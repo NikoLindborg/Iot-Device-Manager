@@ -4,8 +4,11 @@ import {SubscribedChannel} from '../schemas/subscribedChannel'
 import {ifAnnouncements} from './../types/announcementType'
 import WebSocket from 'ws'
 
-const updateMongoDevice = (message: ifAnnouncements, attestStatus: number,
-  wss) => {
+const updateMongoDevice = (
+  message: ifAnnouncements,
+  attestStatus: number,
+  wss
+) => {
   try {
     DeviceNotification.create({
       deviceId: message._id,
@@ -103,7 +106,10 @@ const updateSubscribedChannels = (
   }
 }
 
-const updateAttestation = async (attestStatus: number, id: string):Promise<any> => {
+const updateAttestation = async (
+  attestStatus: number,
+  id: string
+): Promise<any> => {
   try {
     try {
       Device.findOneAndUpdate(
@@ -112,7 +118,7 @@ const updateAttestation = async (attestStatus: number, id: string):Promise<any> 
           trustedState: attestStatus,
           $push: {
             history: {
-              timestamp: Date.now()/1000,
+              timestamp: Date.now() / 1000,
               trustedState: attestStatus,
             },
           },
@@ -124,9 +130,12 @@ const updateAttestation = async (attestStatus: number, id: string):Promise<any> 
     } catch (error) {
       console.log('mongodb error', error)
     }
-  } catch (error) {
-
-  }
+  } catch (error) {}
 }
 
-export {updateMongoDevice, createNewMongoDevice, updateSubscribedChannels, updateAttestation}
+export {
+  updateMongoDevice,
+  createNewMongoDevice,
+  updateSubscribedChannels,
+  updateAttestation,
+}

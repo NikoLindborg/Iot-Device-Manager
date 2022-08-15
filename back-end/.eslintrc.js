@@ -11,7 +11,6 @@ module.exports = {
     sourceType: 'module',
   },
   plugins: ['@typescript-eslint', 'prettier'],
-  ignorePattern: ['./dist'],
   rules: {
     'no-console': 0,
     'require-jsdoc': 0,
@@ -36,5 +35,6 @@ module.exports = {
     semi: [2, 'never'],
     indent: ['error', 2],
     'operator-linebreak': ['error', 'before'],
+    'new-cap': ['error', 'false'],
   },
 }

@@ -5,7 +5,7 @@ const originalTopic = 'ANNOUNCEMENTS'
 const connectUrl = `mqtt://${host}:${mqttPort}`
 
 
-const a10RestApi = 'http://194.157.71.11:8520/v2'
+const a10RestApi = '' // Attestation server url here
 //attestation a10 related variables
 
 //PCread
